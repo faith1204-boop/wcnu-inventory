@@ -499,6 +499,16 @@
             100% { transform: rotate(360deg); }
         }
 
+        .suggested-code {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
         @media (max-width: 768px) {
             .controls {
                 flex-direction: column;
@@ -587,22 +597,22 @@
                 <div class="filter-group">
                     <select id="categoryFilter" onchange="filterTable()">
                         <option value="">전체 카테고리 | ប្រភេទទាំងអស់</option>
-                        <option value="medical">의료기자재</option>
-                        <option value="nursing">간호실습용품</option>
-                        <option value="office">사무용품</option>
-                        <option value="education">교육장비</option>
-                        <option value="furniture">가구</option>
-                        <option value="it">IT/전자기기</option>
-                        <option value="cleaning">청소/위생용품</option>
-                        <option value="books">도서/교재</option>
-                        <option value="other">기타</option>
+                        <option value="medical">의료기자재 | ឧបករណ៍វេជ្ជសាស្ត្រ</option>
+                        <option value="nursing">간호실습용품 | សម្ភារៈអនុវត្តគិលានុបដ្ឋាយិកា</option>
+                        <option value="office">사무용품 | សម្ភារៈការិយាល័យ</option>
+                        <option value="education">교육장비 | ឧបករណ៍អប់រំ</option>
+                        <option value="furniture">가구 | គ្រឿងសង្ហារឹម</option>
+                        <option value="it">IT/전자기기 | IT/អេឡិចត្រូនិច</option>
+                        <option value="cleaning">청소/위생용품 | សម្ភារៈអនាម័យ</option>
+                        <option value="books">도서/교재 | សៀវភៅ/សម្ភារៈសិក្សា</option>
+                        <option value="other">기타 | ផ្សេងៗ</option>
                     </select>
 
                     <select id="statusFilter" onchange="filterTable()">
                         <option value="">전체 상태 | ស្ថានភាពទាំងអស់</option>
-                        <option value="good">정상</option>
-                        <option value="low">부족</option>
-                        <option value="critical">긴급</option>
+                        <option value="good">정상 | ធម្មតា</option>
+                        <option value="low">부족 | ខ្វះ</option>
+                        <option value="critical">긴급 | បន្ទាន់</option>
                     </select>
                 </div>
             </div>
@@ -644,26 +654,37 @@
             <form id="itemForm" onsubmit="saveItem(event)">
                 <input type="hidden" id="itemId">
                 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>카테고리 *<span class="khmer">ប្រភេទ</span></label>
-                        <select id="itemCategory" required>
-                            <option value="">선택하세요</option>
-                            <option value="medical">의료기자재</option>
-                            <option value="nursing">간호실습용품</option>
-                            <option value="office">사무용품</option>
-                            <option value="education">교육장비</option>
-                            <option value="furniture">가구</option>
-                            <option value="it">IT/전자기기</option>
-                            <option value="cleaning">청소/위생용품</option>
-                            <option value="books">도서/교재</option>
-                            <option value="other">기타</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>물품 코드 *<span class="khmer">លេខកូដសម្ភារៈ</span></label>
-                        <input type="text" id="itemCode" required placeholder="예: MED-001">
-                    </div>
+                <div class="form-group">
+                    <label>카테고리 *<span class="khmer">ប្រភេទ</span></label>
+                    <select id="itemCategory" required onchange="updateCodeAndItems()">
+                        <option value="">선택하세요 | សូមជ្រើសរើស</option>
+                        <option value="medical">의료기자재 | ឧបករណ៍វេជ្ជសាស្ត្រ</option>
+                        <option value="nursing">간호실습용품 | សម្ភារៈអនុវត្តគិលានុបដ្ឋាយិកា</option>
+                        <option value="office">사무용품 | សម្ភារៈការិយាល័យ</option>
+                        <option value="education">교육장비 | ឧបករណ៍អប់រំ</option>
+                        <option value="furniture">가구 | គ្រឿងសង្ហារឹម</option>
+                        <option value="it">IT/전자기기 | IT/អេឡិចត្រូនិច</option>
+                        <option value="cleaning">청소/위생용품 | សម្ភារៈអនាម័យ</option>
+                        <option value="books">도서/교재 | សៀវភៅ/សម្ភារៈសិក្សា</option>
+                        <option value="other">기타 | ផ្សេងៗ</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>물품 코드 *<span class="khmer">លេខកូដសម្ភារៈ</span></label>
+                    <input type="text" id="itemCode" required placeholder="카테고리를 먼저 선택하세요">
+                    <div id="suggestedCodeDisplay"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>물품명 선택<span class="khmer">ជ្រើសរើសសម្ភារៈ</span></label>
+                    <select id="itemNameSelect" onchange="selectItemFromList()">
+                        <option value="">카테고리를 먼저 선택하세요 | សូមជ្រើសប្រភេទសិន</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>또는 직접 입력<span class="khmer">ឬបញ្ចូលដោយដៃ</span></label>
                 </div>
 
                 <div class="form-group">
@@ -739,6 +760,251 @@
         // 데이터 저장소
         let inventory = [];
 
+        // 카테고리별 코드 prefix
+        const codePrefixes = {
+            'medical': 'MED',
+            'nursing': 'NUR',
+            'office': 'OFF',
+            'education': 'EDU',
+            'furniture': 'FUR',
+            'it': 'IT',
+            'cleaning': 'CLN',
+            'books': 'BK',
+            'other': 'ETC'
+        };
+
+        // ⭐⭐⭐ 카테고리별 물품 리스트 (한글 | 크메르어) ⭐⭐⭐
+        const itemsByCategory = {
+            medical: [
+                '혈압계 (자동) | ឧបករណ៍វាស់សម្ពាធឈាម (ស្វ័យប្រវត្តិ)',
+                '혈압계 (수동) | ឧបករណ៍វាស់សម្ពាធឈាម (ដោយដៃ)',
+                '디지털 체온계 | កាល់សីម៉ែត្រឌីជីថល',
+                '청진기 | ស្តេតូស្កុប',
+                '산소포화도 측정기 | ម៉ាស៊ីនវាស់ឆាតតុរាប់អុកស៊ីសែន',
+                '심전도기 | ឧបករណ៍វាស់ចង្វាក់បេះដូង',
+                '네뷸라이저 | ម៉ាស៊ីនបំប៉ងសាយ',
+                '석션기 | ម៉ាស៊ីនបឺតស្រូប',
+                '주사기 세트 | ឈុតសឺរាំង',
+                '수액 세트 | ឈុតបញ្ចូលសេរ៉ូម',
+                '의료용 가위 | កន្ត្រៃវេជ្ជសាស្ត្រ',
+                '핀셋 | ច្រត់ចាប់',
+                '반창고 | ផ្លាស្ទ័រ',
+                '붕대 | អាំងប៉ាង',
+                '알코올 솜 | ភ្នាសជូតអាល់កុល',
+                '소독약 | ថ្នាំសម្លាប់មេរោគ',
+                '일회용 장갑 | ស្រោមដៃប្រើម្តង',
+                'N95 마스크 | របាំងបិទមាត់ N95',
+                '수술용 마스크 | របាំងវះកាត់',
+                '의료용 앞치마 | អាវក្រណាត់វេជ្ជសាស្ត្រ'
+            ],
+            nursing: [
+                '실습용 마네킹 (성인) | តុក្កតាអនុវត្ត (មនុស្សពេញវ័យ)',
+                '실습용 마네킹 (소아) | តុក្កតាអនុវត្ត (កុមារ)',
+                '실습용 마네킹 (신생아) | តុក្កតាអនុវត្ត (ទារកទើបកើត)',
+                '정맥주사 연습 팔 | ដៃអនុវត្តចាក់សឺរ៉ូម',
+                '근육주사 연습 모형 | ម៉ូតអនុវត្តចាក់សាច់ដុំ',
+                '도뇨관 삽입 연습 모형 | ម៉ូតអនុវត្តបញ្ចូលបំពង់បត់ទឹកនោម',
+                '기관삽관 연습 모형 | ម៉ូតអនុវត្តបញ្ចូលបំពង់ដង្ហើម',
+                '심폐소생술 마네킹 | តុក្កតាអនុវត្ត CPR',
+                '상처 드레싱 키트 | ឈុតធ្វើបង់របួស',
+                '투약 트레이 | ថាសដាក់ថ្នាំ',
+                '간호 카트 | រទេះគិលានុបដ្ឋាយិកា',
+                '체위 변경 쿠션 | ខ្នើយប្តូរទំរង់',
+                '환자용 침대 시트 | ក្រណាត់ចាក់គ្រែអ្នកជំងឺ',
+                '휠체어 | កៅអីរុញ',
+                '목발 | អណ្តើក',
+                '워커 | ជើងដែក',
+                '이동식 변기 | ទូទឹកចល័ត',
+                '요실금 패드 | បន្ទះស្រូបទឹកនោម',
+                '욕창 예방 매트 | កម្រាលពារដំបៅ',
+                '체온계 보호 커버 | គម្របការពារកាល់សីម៉ែត្រ'
+            ],
+            office: [
+                '복사용지 (A4) | ក្រដាសថតចម្លង (A4)',
+                '복사용지 (A3) | ក្រដាសថតចម្លង (A3)',
+                '볼펜 (흑색) | ប៊ិចខ្មៅ',
+                '볼펜 (청색) | ប៊ិចខៀវ',
+                '볼펜 (적색) | ប៊ិចក្រហម',
+                '형광펜 세트 | ឈុតប៊ិចរំលេច',
+                '연필 | ខ្មៅដៃ',
+                '지우개 | កៅស៊ូ',
+                '샤프펜슬 | ខ្មៅដៃមេកានិច',
+                '가위 | កន្ត្រៃ',
+                '스테이플러 | ម៉ាស៊ីនដេរ',
+                '스테이플 침 | ម្ជុលដេរ',
+                '클립 (대) | ឃ្លីបធំ',
+                '클립 (소) | ឃ្លីបតូច',
+                '풀 | កាវ',
+                '테이프 | ខ្សែរភ្ជាប់',
+                '포스트잇 | ក្រដាសភ្ជាប់',
+                '파일 박스 | ប្រអប់ដាក់ឯកសារ',
+                '클리어 파일 | ឯកសារប្លាស្ទិច',
+                '바인더 | ប្រអប់ចងឯកសារ',
+                '계산기 | ម៉ាស៊ីនគិតលេខ',
+                '화이트보드 마커 | ប៊ិចក្តារស',
+                '지우개 (화이트보드용) | ស្រោមជូតក្តារស',
+                '명함지 | ក្រដាសបោះពុម្ពនាមប័ណ្ណ',
+                '전화기 | ទូរស័ព្ទ'
+            ],
+            education: [
+                '노트북 컴퓨터 | កុំព្យូទ័រយួរដៃ',
+                '프로젝터 | ម៉ាស៊ីនបញ្ចាំង',
+                '스크린 | អេក្រង់បញ្ចាំង',
+                '레이저 포인터 | ចង្អុលប្រៃស៊ែន',
+                '마이크 (무선) | មីក្រូហ្វូន (គ្មានខ្សែ)',
+                '스피커 | បាស',
+                '화이트보드 | ក្តារស',
+                '칠판 | ក្តារខៀន',
+                '교육용 포스터 | ផ្ទាំងរូបភាពអប់រំ',
+                '해부학 모형 | ម៉ូតកាយវិភាគ',
+                '골격 모형 | ម៉ូតឆ្អឹង',
+                '인체 장기 모형 | ម៉ូតសរីរាង្គមនុស្ស',
+                '현미경 | មីក្រូស្កុប',
+                '실험용 비커 | ពែងពិសោធន៍',
+                '실험용 플라스크 | ដបពិសោធន៍',
+                '시험관 | បំពង់ពិសោធន៍',
+                '피펫 | ប៊ីប៉ែត',
+                '저울 (전자) | ជញ្ជីងអេឡិចត្រូនិច',
+                '타이머 | នាឡិកាកំណត់ពេល',
+                '온도계 | កាល់សីម៉ែត្រ',
+                '책상 | តុ',
+                '의자 | កៅអី',
+                '교육용 DVD | ឌីវីឌីអប់រំ',
+                '교재 보관함 | ធុងដាក់សៀវភៅ',
+                '학생용 사물함 | ទូដាក់របស់សិស្ស'
+            ],
+            furniture: [
+                '책상 (학생용) | តុ (សម្រាប់សិស្ស)',
+                '책상 (교수용) | តុ (សម្រាប់សាស្ត្រាចារ្យ)',
+                '책상 (사무용) | តុ (សម្រាប់ការិយាល័យ)',
+                '의자 (학생용) | កៅអី (សម្រាប់សិស្ស)',
+                '의자 (교수용) | កៅអី (សម្រាប់សាស្ត្រាចារ្យ)',
+                '의자 (사무용) | កៅអី (សម្រាប់ការិយាល័យ)',
+                '회의용 테이블 | តុប្រជុំ',
+                '책장 | ធ្នើរសៀវភៅ',
+                '서랍장 | ធ្នើរមានថត',
+                '옷장 | ទូខោអាវ',
+                '신발장 | ទូដាក់ស្បែកជើង',
+                '소파 (2인용) | សាឡុង (២នាក់)',
+                '소파 (3인용) | សាឡុង (៣នាក់)',
+                '커피 테이블 | តុកាហ្វេ',
+                '진열대 | ធ្នើរដាក់បង្ហាញ',
+                '화이트보드 스탠드 | កន្ត្រកតាំងក្តារស',
+                '우산 거치대 | កន្លែងដាក់ឆ័ត្រ',
+                '옷걸이 | កន្លែងព្យួរខោអាវ',
+                '휴지통 | ធុងសំរាម',
+                '시계 (벽걸이) | នាឡិកាព្យួរជញ្ជាំង'
+            ],
+            it: [
+                '데스크톱 컴퓨터 | កុំព្យូទ័រតុ',
+                '모니터 | អេក្រង់',
+                '키보드 | ក្តារចុច',
+                '마우스 | ម៉ៅ',
+                '프린터 (레이저) | ម៉ាស៊ីនព្រីន (ឡាស៊ែរ)',
+                '프린터 (잉크젯) | ម៉ាស៊ីនព្រីន (ទឹកថ្នាំ)',
+                '스캐너 | ម៉ាស៊ីនស្កែន',
+                '복합기 | ម៉ាស៊ីនពហុមុខងារ',
+                '외장 하드디스크 | ថាសរឹងខាងក្រៅ',
+                'USB 메모리 | USB',
+                '웹캠 | កាមេរ៉ាវេប',
+                '헤드셋 | កាស',
+                '무선 라우터 | រ៉ោតទ័រគ្មានខ្សែ',
+                '스위치 허브 | ស្វីតហាប់',
+                'LAN 케이블 | ខ្សែ LAN',
+                '전원 케이블 | ខ្សែភ្លើង',
+                'HDMI 케이블 | ខ្សែ HDMI',
+                '멀티탭 | ប្រអប់ភ្លើងពហុ',
+                '무정전 전원장치 (UPS) | ម៉ាស៊ីនទប់ភ្លើងដាច់',
+                '토너 카트리지 | តឺណឺ',
+                '잉크 카트리지 | ទឹកថ្នាំព្រីន',
+                '마우스 패드 | បន្ទះដាក់ម៉ៅ',
+                '모니터 받침대 | កន្ត្រកតាំងអេក្រង់',
+                '케이블 정리함 | ប្រអប់តម្រៀបខ្សែ',
+                '청소용 에어 스프레이 | ស្ព្រេយសម្អាតខ្យល់'
+            ],
+            cleaning: [
+                '비누 | សាប៊ូ',
+                '손세정제 | ទឹកលាងដៃ',
+                '알코올 (소독용) | អាល់កុល (សម្លាប់មេរោគ)',
+                '락스 (표백제) | ទឹកប្រឡាក់សុទ្ធ',
+                '세제 (주방용) | ទឹកលាងចាន',
+                '세제 (세탁용) | ទឹកលាងខោអាវ',
+                '유리 세정제 | ទឹកលាងកញ្ចក់',
+                '바닥 세정제 | ទឹកលាងផ្ទាំង',
+                '화장실 세정제 | ទឹកលាងបង្គន់',
+                '걸레 | ក្រណាត់ជូត',
+                '대걸레 | កន្ទ្រាងជូតផ្ទាំង',
+                '빗자루 | អណ្តូង',
+                '쓰레받기 | ហែតសំរាម',
+                '먼지털이 | អណ្តូងសំរាមធូលី',
+                '쓰레기봉투 (대) | ថង់សំរាមធំ',
+                '쓰레기봉투 (소) | ថង់សំរាមតូច',
+                '고무장갑 | ស្រោមដៃកៅស៊ូ',
+                '수세미 | ស្រោមកកទន់',
+                '휴지 (두루마리) | ក្រដាសធូមូម៉ា',
+                '휴지 (갑) | ក្រដាសធូមក្រអូប',
+                '물티슈 | ក្រដាសជូតសើម',
+                '버킷 | ធុងទឹក',
+                '청소용 브러시 | ជក់សម្អាត',
+                '유리닦이 | ស្រោមជូតកញ្ចក់',
+                '진공청소기 | ម៉ាស៊ីនបូមធូលី'
+            ],
+            books: [
+                '간호학 개론 | សៀវភៅគិលានុបដ្ឋាយិកាមូលដ្ឋាន',
+                '해부생리학 | សៀវភៅកាយវិភាគសរីរវិទ្យា',
+                '약리학 | សៀវភៅឱសថវិទ្យា',
+                '병리학 | សៀវភៅរោគវិទ្យា',
+                '미생물학 | សៀវភៅមីក្រូជីវសាស្ត្រ',
+                '영양학 | សៀវភៅអាហាររូបត្ថម្ភ',
+                '성인간호학 | សៀវភៅគិលានុបដ្ឋាយិកាមនុស្សពេញវ័យ',
+                '아동간호학 | សៀវភៅគិលានុបដ្ឋាយិកាកុមារ',
+                '모성간호학 | សៀវភៅគិលានុបដ្ឋាយិកាម្តាយ',
+                '정신간호학 | សៀវភៅគិលានុបដ្ឋាយិកាផ្លូវចិត្ត',
+                '지역사회간호학 | សៀវភៅគិលានុបដ្ឋាយិកាសហគមន៍',
+                '간호관리학 | សៀវភៅគ្រប់គ្រងគិលានុបដ្ឋាយិកា',
+                '간호연구 | សៀវភៅស្រាវជ្រាវគិលានុបដ្ឋាយិកា',
+                '의학용어 | សៀវភៅពាក្យវេជ្ជសាស្ត្រ',
+                '한국어 교재 (초급) | សៀវភៅភាសាកូរ៉េ (កម្រិតចាប់ផ្តើម)',
+                '한국어 교재 (중급) | សៀវភៅភាសាកូរ៉េ (កម្រិតមធ្យម)',
+                '한국어 교재 (고급) | សៀវភៅភាសាកូរ៉េ (កម្រិតខ្ពស់)',
+                '영어 회화 | សៀវភៅសន្ទនាអង់គ្លេស',
+                '의학 영어 | សៀវភៅអង់គ្លេសវេជ្ជសាស្ត្រ',
+                '간호 실습 지침서 | សៀវភៅណែនាំអនុវត្តគិលានុបដ្ឋាយិកា',
+                '참고 도서 | សៀវភៅយោង',
+                '저널 (학술지) | ទស្សនាវដ្តីបណ្ឌិត្យសភា',
+                '워크북 | សៀវភៅលំហាត់',
+                '노트 | សៀវភៅកត់ត្រា',
+                '의료 법규집 | សៀវភៅច្បាប់វេជ្ជសាស្ត្រ'
+            ],
+            other: [
+                '시계 | នាឡិកា',
+                '달력 | ប្រតិទិន',
+                '게시판 | ក្តារបិទសេចក្តីជូនដំណឹង',
+                '명찰 | ផ្លាកឈ្មោះ',
+                '랜야드 | ខ្សែព្យួរផ្លាកឈ្មោះ',
+                '배터리 (AA) | ថ្ម (AA)',
+                '배터리 (AAA) | ថ្ម (AAA)',
+                '손전등 | ភ្លើងពិល',
+                '우산 | ឆ័ត្រ',
+                '우비 | អាវជំនួស',
+                '구급상자 | ប្រអប់បន្ទាន់',
+                '소화기 | ឧបករណ៍ពន្លត់អគ្គិភ័យ',
+                '열쇠 | ស្នោ',
+                '자물쇠 | សោរចាក់',
+                '현수막 | ផ្ទាំងបដា',
+                '포스터 | ផ្ទាំងរូបភាព',
+                '명함 | នាមប័ណ្ណ',
+                '봉투 (서류용) | ស្រោមលិខិត',
+                '상자 (포장용) | ប្រអប់ខ្ចប់របស់',
+                '테이프 (포장용) | ខ្សែរភ្ជាប់ប្រអប់',
+                '스티커 라벨 | ស្ទីកឃ័រ',
+                '인장 | ត្រា',
+                '인주 | ទឹកថ្នាំត្រា',
+                '지갑 | កាបូប',
+                '카드 홀더 | កន្លែងដាក់កាត'
+            ]
+        };
+
         // 로딩 표시
         function showLoading() {
             document.getElementById('loadingOverlay').classList.add('active');
@@ -746,6 +1012,69 @@
 
         function hideLoading() {
             document.getElementById('loadingOverlay').classList.remove('active');
+        }
+
+        // ⭐⭐⭐ 카테고리 선택 시 코드와 물품명 리스트 업데이트 ⭐⭐⭐
+        function updateCodeAndItems() {
+            const category = document.getElementById('itemCategory').value;
+            const codeInput = document.getElementById('itemCode');
+            const codeDisplay = document.getElementById('suggestedCodeDisplay');
+            const itemSelect = document.getElementById('itemNameSelect');
+            
+            if (!category) {
+                codeInput.value = '';
+                codeInput.placeholder = '카테고리를 먼저 선택하세요';
+                codeDisplay.innerHTML = '';
+                itemSelect.innerHTML = '<option value="">카테고리를 먼저 선택하세요 | សូមជ្រើសប្រភេទសិន</option>';
+                itemSelect.disabled = true;
+                return;
+            }
+            
+            // 자동 코드 생성
+            const prefix = codePrefixes[category];
+            const existingCodes = inventory
+                .filter(item => item.category === category)
+                .map(item => item.code)
+                .filter(code => code.startsWith(prefix + '-'))
+                .sort();
+            
+            let nextNumber = 1;
+            if (existingCodes.length > 0) {
+                const lastCode = existingCodes[existingCodes.length - 1];
+                const lastNumber = parseInt(lastCode.split('-')[1]);
+                if (!isNaN(lastNumber)) {
+                    nextNumber = lastNumber + 1;
+                }
+            }
+            
+            const suggestedCode = `${prefix}-${String(nextNumber).padStart(3, '0')}`;
+            codeInput.value = suggestedCode;
+            codeInput.placeholder = `예: ${suggestedCode}`;
+            codeDisplay.innerHTML = `<span class="suggested-code">💡 추천: ${suggestedCode}</span>`;
+            
+            // 물품명 리스트 업데이트
+            itemSelect.innerHTML = '<option value="">리스트에서 선택하거나 직접 입력 | ជ្រើសពីបញ្ជី ឬបញ្ចូលដោយដៃ</option>';
+            
+            if (itemsByCategory[category]) {
+                itemsByCategory[category].forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item;
+                    option.textContent = item;
+                    itemSelect.appendChild(option);
+                });
+                itemSelect.disabled = false;
+            }
+        }
+
+        // 물품 리스트에서 선택 시 입력 필드에 자동 입력
+        function selectItemFromList() {
+            const selectedValue = document.getElementById('itemNameSelect').value;
+            
+            if (selectedValue) {
+                const parts = selectedValue.split(' | ');
+                document.getElementById('itemNameKo').value = parts[0] || '';
+                document.getElementById('itemNameKh').value = parts[1] || '';
+            }
         }
         
         // ⭐⭐⭐ CORS 문제 완전 해결 - 구글 시트에서 데이터 로드 ⭐⭐⭐
@@ -764,7 +1093,7 @@
                 
                 const response = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
                     method: 'GET',
-                    redirect: 'follow'  // 중요: Google Apps Script 리다이렉트 처리
+                    redirect: 'follow'
                 });
                 
                 debugLog('응답 상태:', response.status);
@@ -777,7 +1106,6 @@
                 debugLog('파싱된 결과:', result);
                 
                 if (result.success) {
-                    // 구글 시트 데이터를 inventory 형식으로 변환
                     inventory = result.data.map(item => ({
                         id: parseInt(item['ID (숨김)']) || Date.now() + Math.random(),
                         code: item['물품코드'] || '',
@@ -798,31 +1126,24 @@
                     
                     debugLog('변환된 inventory:', inventory);
                     
-                    // 로컬 스토리지에도 백업
                     saveToStorage();
-                    
                     updateStats();
                     renderTable();
-                    
                     hideLoading();
                     
                     console.log(`✅ 성공! ${inventory.length}개의 물품을 불러왔습니다.`);
                     
                 } else {
                     hideLoading();
-                    
                     const errorMsg = result.error || '알 수 없는 오류';
                     console.error('서버 오류:', result);
-                    
                     alert(`❌ 데이터 로드 실패\n\n오류: ${errorMsg}`);
                 }
             } catch (error) {
                 console.error('구글 시트 연결 오류:', error);
                 hideLoading();
-                
                 alert(`❌ 구글 시트 연결 실패\n\n오류: ${error.message}\n\n로컬 데이터를 사용합니다.`);
                 
-                // 로컬 데이터 사용
                 const localData = localStorage.getItem('wcnu_inventory');
                 if (localData) {
                     try {
@@ -870,10 +1191,9 @@
                 debugLog('POST payload:', payload);
                 console.log('📤 구글 시트로 데이터 전송 중...');
                 
-                // ⭐ CORS 해결: redirect 'follow' 추가
                 const response = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
                     method: 'POST',
-                    mode: 'no-cors',  // ⭐⭐⭐ CORS 회피
+                    mode: 'no-cors',
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -881,11 +1201,8 @@
                     redirect: 'follow'
                 });
                 
-                // no-cors 모드에서는 응답을 읽을 수 없음
-                // 대신 요청이 성공적으로 전송되었다고 가정
                 console.log('✅ 구글 시트로 요청 전송 완료!');
                 
-                // 저장 후 약간 대기 후 다시 로드
                 setTimeout(() => {
                     console.log('🔄 최신 데이터 다시 로드 중...');
                     loadFromGoogleSheets();
@@ -1049,6 +1366,9 @@
             document.getElementById('modalTitleKhmer').textContent = 'បញ្ចូលសម្ភារៈ';
             document.getElementById('itemForm').reset();
             document.getElementById('itemId').value = '';
+            document.getElementById('suggestedCodeDisplay').innerHTML = '';
+            document.getElementById('itemNameSelect').innerHTML = '<option value="">카테고리를 먼저 선택하세요 | សូមជ្រើសប្រភេទសិន</option>';
+            document.getElementById('itemNameSelect').disabled = true;
             document.getElementById('itemModal').classList.add('active');
         }
 
@@ -1070,6 +1390,8 @@
             document.getElementById('itemPurchaseDate').value = item.purchaseDate || '';
             document.getElementById('itemNotes').value = item.notes || '';
 
+            updateCodeAndItems();
+            
             document.getElementById('itemModal').classList.add('active');
         }
 
@@ -1115,7 +1437,6 @@
             renderTable();
             closeModal();
 
-            // 구글 시트에 저장
             saveToGoogleSheets(action, savedItem);
 
             console.log('✅ 물품이 성공적으로 저장되었습니다!');
@@ -1131,7 +1452,6 @@
             updateStats();
             renderTable();
 
-            // 구글 시트에서 삭제
             if (item) {
                 saveToGoogleSheets('delete', { id: id });
             }
