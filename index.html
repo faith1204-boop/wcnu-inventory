@@ -183,6 +183,17 @@
             border-color: #667eea;
         }
 
+        optgroup {
+            font-weight: bold;
+            font-style: normal;
+            color: #1e3c72;
+        }
+
+        optgroup option {
+            font-weight: normal;
+            padding-left: 20px;
+        }
+
         .table-container {
             overflow-x: auto;
             border-radius: 10px;
@@ -240,34 +251,29 @@
             margin-top: 2px;
         }
 
-        .badge-medical {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .badge-nursing {
+        .badge-practice {
             background: #fce7f3;
             color: #9f1239;
+        }
+
+        .badge-education-it {
+            background: #ddd6fe;
+            color: #5b21b6;
+        }
+
+        .badge-education-furniture {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .badge-education-equipment {
+            background: #d1fae5;
+            color: #065f46;
         }
 
         .badge-office {
             background: #fef3c7;
             color: #92400e;
-        }
-
-        .badge-education {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .badge-furniture {
-            background: #e0e7ff;
-            color: #3730a3;
-        }
-
-        .badge-it {
-            background: #ddd6fe;
-            color: #5b21b6;
         }
 
         .badge-cleaning {
@@ -281,6 +287,11 @@
         }
 
         .badge-other {
+
+        .badge-warehouse {
+            background: #fef9c3;
+            color: #854d0e;
+        }
             background: #f3e8ff;
             color: #6b21a8;
         }
@@ -597,14 +608,16 @@
                 <div class="filter-group">
                     <select id="categoryFilter" onchange="filterTable()">
                         <option value="">전체 카테고리 | ប្រភេទទាំងអស់</option>
-                        <option value="medical">의료기자재 | ឧបករណ៍វេជ្ជសាស្ត្រ</option>
-                        <option value="nursing">간호실습용품 | សម្ភារៈអនុវត្តគិលានុបដ្ឋាយិកា</option>
+                        <option value="practice">실습기자재 | សម្ភារៈអនុវត្ត</option>
+                        <optgroup label="📚 교육기자재 | ឧបករណ៍អប់រំ">
+                            <option value="education-it">  ├ IT/전자기기 | IT/អេឡិចត្រូនិច</option>
+                            <option value="education-furniture">  ├ 가구 | គ្រឿងសង្ហារឹម</option>
+                            <option value="education-equipment">  └ 기타교육기자재 | ឧបករណ៍អប់រំផ្សេងៗ</option>
+                        </optgroup>
                         <option value="office">사무용품 | សម្ភារៈការិយាល័យ</option>
-                        <option value="education">교육장비 | ឧបករណ៍អប់រំ</option>
-                        <option value="furniture">가구 | គ្រឿងសង្ហារឹម</option>
-                        <option value="it">IT/전자기기 | IT/អេឡិចត្រូនិច</option>
                         <option value="cleaning">청소/위생용품 | សម្ភារៈអនាម័យ</option>
                         <option value="books">도서/교재 | សៀវភៅ/សម្ភារៈសិក្សា</option>
+                        <option value="warehouse">창고 | ឃ្លាំង</option>
                         <option value="other">기타 | ផ្សេងៗ</option>
                     </select>
 
@@ -658,14 +671,16 @@
                     <label>카테고리 *<span class="khmer">ប្រភេទ</span></label>
                     <select id="itemCategory" required onchange="updateCodeAndItems()">
                         <option value="">선택하세요 | សូមជ្រើសរើស</option>
-                        <option value="medical">의료기자재 | ឧបករណ៍វេជ្ជសាស្ត្រ</option>
-                        <option value="nursing">간호실습용품 | សម្ភារៈអនុវត្តគិលានុបដ្ឋាយិកា</option>
+                        <option value="practice">실습기자재 | សម្ភារៈអនុវត្ត</option>
+                        <optgroup label="📚 교육기자재 | ឧបករណ៍អប់រំ">
+                            <option value="education-it">  ├ IT/전자기기 | IT/អេឡិចត្រូនិច</option>
+                            <option value="education-furniture">  ├ 가구 | គ្រឿងសង្ហារឹម</option>
+                            <option value="education-equipment">  └ 기타교육기자재 | ឧបករណ៍អប់រំផ្សេងៗ</option>
+                        </optgroup>
                         <option value="office">사무용품 | សម្ភារៈការិយាល័យ</option>
-                        <option value="education">교육장비 | ឧបករណ៍អប់រំ</option>
-                        <option value="furniture">가구 | គ្រឿងសង្ហារឹម</option>
-                        <option value="it">IT/전자기기 | IT/អេឡិចត្រូនិច</option>
                         <option value="cleaning">청소/위생용품 | សម្ភារៈអនាម័យ</option>
                         <option value="books">도서/교재 | សៀវភៅ/សម្ភារៈសិក្សា</option>
+                        <option value="warehouse">창고 | ឃ្លាំង</option>
                         <option value="other">기타 | ផ្សេងៗ</option>
                     </select>
                 </div>
@@ -708,7 +723,7 @@
                         <input type="number" id="itemQuantity" required min="0" placeholder="0">
                     </div>
                     <div class="form-group">
-                        <label>최소재고 <span class="khmer">ស្តុកអប្បបរមា</span></label>
+                        <label>최소재고<span class="khmer">ស្តុកអប្បបរមា</span></label>
                         <input type="number" id="itemMinQuantity" min="0" placeholder="0">
                     </div>
                 </div>
@@ -760,22 +775,22 @@
         // 데이터 저장소
         let inventory = [];
 
-        // 카테고리별 코드 prefix
+        // ⭐⭐⭐ 재구조화된 카테고리 코드 prefix ⭐⭐⭐
         const codePrefixes = {
-            'medical': 'MED',
-            'nursing': 'NUR',
-            'office': 'OFF',
-            'education': 'EDU',
-            'furniture': 'FUR',
-            'it': 'IT',
-            'cleaning': 'CLN',
-            'books': 'BK',
-            'other': 'ETC'
+            'practice': 'PRC',              // 실습기자재
+            'education-it': 'IT',           // 교육 > IT/전자기기
+            'education-furniture': 'FUR',   // 교육 > 가구
+            'education-equipment': 'EDU',   // 교육 > 기타교육기자재
+            'office': 'OFF',                // 사무용품
+            'cleaning': 'CLN',              // 청소/위생용품
+            'books': 'BK',                  // 도서/교재            'warehouse': 'WHR',             // 창고
+            'other': 'ETC'                  // 기타
         };
 
-        // ⭐⭐⭐ 카테고리별 물품 리스트 (한글 | 크메르어) ⭐⭐⭐
+        // ⭐⭐⭐ 재구조화된 카테고리별 물품 리스트 ⭐⭐⭐
         const itemsByCategory = {
-            medical: [
+            // 실습기자재 (의료 + 간호 통합)
+            practice: [
                 '혈압계 (자동) | ឧបករណ៍វាស់សម្ពាធឈាម (ស្វ័យប្រវត្តិ)',
                 '혈압계 (수동) | ឧបករណ៍វាស់សម្ពាធឈាម (ដោយដៃ)',
                 '디지털 체온계 | កាល់សីម៉ែត្រឌីជីថល',
@@ -795,9 +810,7 @@
                 '일회용 장갑 | ស្រោមដៃប្រើម្តង',
                 'N95 마스크 | របាំងបិទមាត់ N95',
                 '수술용 마스크 | របាំងវះកាត់',
-                '의료용 앞치마 | អាវក្រណាត់វេជ្ជសាស្ត្រ'
-            ],
-            nursing: [
+                '의료용 앞치마 | អាវក្រណាត់វេជ្ជសាស្ត្រ',
                 '실습용 마네킹 (성인) | តុក្កតាអនុវត្ត (មនុស្សពេញវ័យ)',
                 '실습용 마네킹 (소아) | តុក្កតាអនុវត្ត (កុមារ)',
                 '실습용 마네킹 (신생아) | តុក្កតាអនុវត្ត (ទារកទើបកើត)',
@@ -819,6 +832,50 @@
                 '욕창 예방 매트 | កម្រាលពារដំបៅ',
                 '체온계 보호 커버 | គម្របការពារកាល់សីម៉ែត្រ'
             ],
+            // 교육 > IT/전자기기
+            'education-it': [
+                '전자칠판 및 이동식스텐드 | ក្តារអេឡិចត្រូនិចនិងជើងចល័ត',
+                '컴퓨터 (PC, 모니터) | កុំព្យូទ័រ (PC និងអេក្រង់)',
+                '음향기기 | ឧបករណ៍សំឡេង',
+                '프린터 | ម៉ាស៊ីនព្រីន',
+                '전화기 | ទូរស័ព្ទ',
+                '복사기 (팩스, 스캔겸용) | ម៉ាស៊ីនថតចម្លង (ទូរសារ ស្កែន)',
+                '종이파쇄기 | ម៉ាស៊ីនកិនក្រដាស',
+                '웹캠 | កាមេរ៉ាវេប'
+            ],
+            // 교육 > 가구
+            'education-furniture': [
+                '2인용 책상 | តុ២នាក់',
+                '3인용 책상 | តុ៣នាក់',
+                '책상 (수업보조용) | តុ (សម្រាប់ជំនួយការសិក្សា)',
+                '2인용 사무용 책상 | តុការិយាល័យ២នាក់',
+                '4인용 사무용 책상 | តុការិយាល័យ៤នាក់',
+                '1인용 사무용 책상 | តុការិយាល័យ១នាក់',
+                '의자 | កៅអី',
+                '강사의자 | កៅអីគ្រូបង្រៀន',
+                '사무용의자 | កៅអីការិយាល័យ',
+                '상담용의자 | កៅអីប្រឹក្សា',
+                '회의용 탁자 (7인용) | តុប្រជុំ (៧នាក់)',
+                '상담용 테이블 (4인용) | តុប្រឹក្សា (៤នាក់)',
+                '테이블 | តុ',
+                '책장 | ធ្នើរសៀវភៅ',
+                '물품보관장 (사무실) | ទូរទុកសម្ភារៈ (ការិយាល័យ)',
+                '사물함 | ទូដាក់របស់',
+                '옷장 | ទូខោអាវ',
+                '파티션 | ផ្ទាំងបំបែក',
+                '의자 (쇼파) | កៅអី (សាឡុង)',
+                '휴지통 | ធុងសំរាម'
+            ],
+            // 교육 > 기타교육기자재
+            'education-equipment': [
+                '화이트보드 | ក្តារស',
+                'AED (심장충격기) 및 보관함 | AED (ឧបករណ៍ជំនួយបេះដូង) និងទូទុក',
+                '시계 | នាឡិកា',
+                '씽크대 | អាងលាងចាន',
+                '냉장고 | ទូរទឹកកក',
+                '정수기 | ម៉ាស៊ីនទឹកស្អាត'
+            ],
+            // 사무용품
             office: [
                 '복사용지 (A4) | ក្រដាសថតចម្លង (A4)',
                 '복사용지 (A3) | ក្រដាសថតចម្លង (A3)',
@@ -846,82 +903,7 @@
                 '명함지 | ក្រដាសបោះពុម្ពនាមប័ណ្ណ',
                 '전화기 | ទូរស័ព្ទ'
             ],
-            education: [
-                '노트북 컴퓨터 | កុំព្យូទ័រយួរដៃ',
-                '프로젝터 | ម៉ាស៊ីនបញ្ចាំង',
-                '스크린 | អេក្រង់បញ្ចាំង',
-                '레이저 포인터 | ចង្អុលប្រៃស៊ែន',
-                '마이크 (무선) | មីក្រូហ្វូន (គ្មានខ្សែ)',
-                '스피커 | បាស',
-                '화이트보드 | ក្តារស',
-                '칠판 | ក្តារខៀន',
-                '교육용 포스터 | ផ្ទាំងរូបភាពអប់រំ',
-                '해부학 모형 | ម៉ូតកាយវិភាគ',
-                '골격 모형 | ម៉ូតឆ្អឹង',
-                '인체 장기 모형 | ម៉ូតសរីរាង្គមនុស្ស',
-                '현미경 | មីក្រូស្កុប',
-                '실험용 비커 | ពែងពិសោធន៍',
-                '실험용 플라스크 | ដបពិសោធន៍',
-                '시험관 | បំពង់ពិសោធន៍',
-                '피펫 | ប៊ីប៉ែត',
-                '저울 (전자) | ជញ្ជីងអេឡិចត្រូនិច',
-                '타이머 | នាឡិកាកំណត់ពេល',
-                '온도계 | កាល់សីម៉ែត្រ',
-                '책상 | តុ',
-                '의자 | កៅអី',
-                '교육용 DVD | ឌីវីឌីអប់រំ',
-                '교재 보관함 | ធុងដាក់សៀវភៅ',
-                '학생용 사물함 | ទូដាក់របស់សិស្ស'
-            ],
-            furniture: [
-                '책상 (학생용) | តុ (សម្រាប់សិស្ស)',
-                '책상 (교수용) | តុ (សម្រាប់សាស្ត្រាចារ្យ)',
-                '책상 (사무용) | តុ (សម្រាប់ការិយាល័យ)',
-                '의자 (학생용) | កៅអី (សម្រាប់សិស្ស)',
-                '의자 (교수용) | កៅអី (សម្រាប់សាស្ត្រាចារ្យ)',
-                '의자 (사무용) | កៅអី (សម្រាប់ការិយាល័យ)',
-                '회의용 테이블 | តុប្រជុំ',
-                '책장 | ធ្នើរសៀវភៅ',
-                '서랍장 | ធ្នើរមានថត',
-                '옷장 | ទូខោអាវ',
-                '신발장 | ទូដាក់ស្បែកជើង',
-                '소파 (2인용) | សាឡុង (២នាក់)',
-                '소파 (3인용) | សាឡុង (៣នាក់)',
-                '커피 테이블 | តុកាហ្វេ',
-                '진열대 | ធ្នើរដាក់បង្ហាញ',
-                '화이트보드 스탠드 | កន្ត្រកតាំងក្តារស',
-                '우산 거치대 | កន្លែងដាក់ឆ័ត្រ',
-                '옷걸이 | កន្លែងព្យួរខោអាវ',
-                '휴지통 | ធុងសំរាម',
-                '시계 (벽걸이) | នាឡិកាព្យួរជញ្ជាំង'
-            ],
-            it: [
-                '데스크톱 컴퓨터 | កុំព្យូទ័រតុ',
-                '모니터 | អេក្រង់',
-                '키보드 | ក្តារចុច',
-                '마우스 | ម៉ៅ',
-                '프린터 (레이저) | ម៉ាស៊ីនព្រីន (ឡាស៊ែរ)',
-                '프린터 (잉크젯) | ម៉ាស៊ីនព្រីន (ទឹកថ្នាំ)',
-                '스캐너 | ម៉ាស៊ីនស្កែន',
-                '복합기 | ម៉ាស៊ីនពហុមុខងារ',
-                '외장 하드디스크 | ថាសរឹងខាងក្រៅ',
-                'USB 메모리 | USB',
-                '웹캠 | កាមេរ៉ាវេប',
-                '헤드셋 | កាស',
-                '무선 라우터 | រ៉ោតទ័រគ្មានខ្សែ',
-                '스위치 허브 | ស្វីតហាប់',
-                'LAN 케이블 | ខ្សែ LAN',
-                '전원 케이블 | ខ្សែភ្លើង',
-                'HDMI 케이블 | ខ្សែ HDMI',
-                '멀티탭 | ប្រអប់ភ្លើងពហុ',
-                '무정전 전원장치 (UPS) | ម៉ាស៊ីនទប់ភ្លើងដាច់',
-                '토너 카트리지 | តឺណឺ',
-                '잉크 카트리지 | ទឹកថ្នាំព្រីន',
-                '마우스 패드 | បន្ទះដាក់ម៉ៅ',
-                '모니터 받침대 | កន្ត្រកតាំងអេក្រង់',
-                '케이블 정리함 | ប្រអប់តម្រៀបខ្សែ',
-                '청소용 에어 스프레이 | ស្ព្រេយសម្អាតខ្យល់'
-            ],
+            // 청소/위생용품
             cleaning: [
                 '비누 | សាប៊ូ',
                 '손세정제 | ទឹកលាងដៃ',
@@ -949,6 +931,7 @@
                 '유리닦이 | ស្រោមជូតកញ្ចក់',
                 '진공청소기 | ម៉ាស៊ីនបូមធូលី'
             ],
+            // 도서/교재
             books: [
                 '간호학 개론 | សៀវភៅគិលានុបដ្ឋាយិកាមូលដ្ឋាន',
                 '해부생리학 | សៀវភៅកាយវិភាគសរីរវិទ្យា',
@@ -976,6 +959,35 @@
                 '노트 | សៀវភៅកត់ត្រា',
                 '의료 법규집 | សៀវភៅច្បាប់វេជ្ជសាស្ត្រ'
             ],
+            // 창고
+            warehouse: [
+                '팔레트 | ផ្ទះឈើ',
+                '핸드 트럭 | រទេះដឹកដោយដៃ',
+                '운반용 카트 | រទេះដឹក',
+                '창고 선반 (대) | ធ្នើរឃ្លាំង (ធំ)',
+                '창고 선반 (중) | ធ្នើរឃ្លាំង (មធ្យម)',
+                '창고 선반 (소) | ធ្នើរឃ្លាំង (តូច)',
+                '보관 상자 (대) | ប្រអប់ទុក (ធំ)',
+                '보관 상자 (중) | ប្រអប់ទុក (មធ្យម)',
+                '보관 상자 (소) | ប្រអប់ទុក (តូច)',
+                '플라스틱 박스 | ប្រអប់ប្លាស្ទិក',
+                '포장 박스 | ប្រអប់ខ្ចប់',
+                '비닐 포장재 | សម្ភារៈខ្ចប់ប្លាស្ទិក',
+                '에어캡 | ប្លោកខ្យល់',
+                '테이프 | ខ្សែរភ្ជាប់',
+                '라벨 스티커 | ស្ទីកឃ័រ',
+                '바코드 스캐너 | ម៉ាស៊ីនស្កែនបាកូដ',
+                '저울 | ជញ្ជីង',
+                '작업용 장갑 | ស្រោមដៃធ្វើការ',
+                '안전모 | មួកសុវត្ថិភាព',
+                '안전화 | ស្បែកជើងសុវត្ថិភាព',
+                '안전 조끼 | អាវកាក់សុវត្ថិភាព',
+                '손수레 | រទេះរុញដោយដៃ',
+                '사다리 | ជណ្តើរ',
+                '발판 | កន្លែងឈរ',
+                '랩핑 필름 | ភីលីមខ្ចប់'
+            ],
+            // 기타
             other: [
                 '시계 | នាឡិកា',
                 '달력 | ប្រតិទិន',
@@ -1178,7 +1190,7 @@
                         nameKh: data.nameKh || data.name.split(' | ')[1] || '',
                         category: data.category,
                         quantity: data.quantity,
-                        minQuantity: data.minQuantity,
+                        minQuantity: data.minQuantity || 0,
                         location: data.location,
                         price: data.price || 0,
                         purchaseDate: data.purchaseDate || '',
@@ -1249,7 +1261,7 @@
         function updateStats() {
             const totalItems = inventory.length;
             const totalQuantity = inventory.reduce((sum, item) => sum + item.quantity, 0);
-            const lowStockCount = inventory.filter(item => item.quantity <= item.minQuantity).length;
+            const lowStockCount = inventory.filter(item => item.minQuantity > 0 && item.quantity <= item.minQuantity).length;
             const categoryCount = new Set(inventory.map(item => item.category)).size;
 
             document.getElementById('totalItems').textContent = totalItems;
@@ -1332,6 +1344,7 @@
         }
 
         function getStatus(item) {
+            if (item.minQuantity === 0) return 'good';  // 최소재고가 0이면 정상
             if (item.quantity === 0) return 'critical';
             if (item.quantity <= item.minQuantity) return 'low';
             return 'good';
@@ -1339,14 +1352,14 @@
 
         function getCategoryName(category) {
             const names = {
-                'medical': '의료기자재',
-                'nursing': '간호실습용품',
+                'practice': '실습기자재',
+                'education-it': 'IT/전자기기',
+                'education-furniture': '가구',
+                'education-equipment': '기타교육기자재',
                 'office': '사무용품',
-                'education': '교육장비',
-                'furniture': '가구',
-                'it': 'IT/전자기기',
                 'cleaning': '청소/위생용품',
                 'books': '도서/교재',
+                'warehouse': '창고',
                 'other': '기타'
             };
             return names[category] || category;
@@ -1414,7 +1427,7 @@
                 category: document.getElementById('itemCategory').value,
                 location: document.getElementById('itemLocation').value,
                 quantity: parseInt(document.getElementById('itemQuantity').value),
-                minQuantity: parseInt(document.getElementById('itemMinQuantity').value),
+                minQuantity: parseInt(document.getElementById('itemMinQuantity').value) || 0,
                 price: parseFloat(document.getElementById('itemPrice').value) || 0,
                 purchaseDate: document.getElementById('itemPurchaseDate').value,
                 notes: document.getElementById('itemNotes').value
