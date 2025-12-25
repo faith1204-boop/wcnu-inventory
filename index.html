@@ -286,12 +286,12 @@
             color: #9a3412;
         }
 
-        .badge-other {
-
         .badge-warehouse {
             background: #fef9c3;
             color: #854d0e;
         }
+
+        .badge-other {
             background: #f3e8ff;
             color: #6b21a8;
         }
@@ -783,7 +783,8 @@
             'education-equipment': 'EDU',   // 교육 > 기타교육기자재
             'office': 'OFF',                // 사무용품
             'cleaning': 'CLN',              // 청소/위생용품
-            'books': 'BK',                  // 도서/교재            'warehouse': 'WHR',             // 창고
+            'books': 'BK',                  // 도서/교재
+            'warehouse': 'WHR',             // 창고
             'other': 'ETC'                  // 기타
         };
 
@@ -864,7 +865,6 @@
                 '옷장 | ទូខោអាវ',
                 '파티션 | ផ្ទាំងបំបែក',
                 '의자 (쇼파) | កៅអី (សាឡុង)'
-                
             ],
             // 교육 > 기타교육기자재
             'education-equipment': [
@@ -1027,43 +1027,51 @@
             document.getElementById('loadingOverlay').classList.remove('active');
         }
 
-        // ⭐⭐⭐ 카테고리 선택 시 코드와 물품명 리스트 업데이트 ⭐⭐⭐
+        // ⭐⭐⭐ 수정: 카테고리 선택 시 코드와 물품명 리스트 업데이트 (수정 모드 구분) ⭐⭐⭐
         function updateCodeAndItems() {
             const category = document.getElementById('itemCategory').value;
             const codeInput = document.getElementById('itemCode');
             const codeDisplay = document.getElementById('suggestedCodeDisplay');
             const itemSelect = document.getElementById('itemNameSelect');
+            const isEditMode = document.getElementById('itemId').value !== ''; // ⭐ 수정 모드 확인
             
             if (!category) {
-                codeInput.value = '';
-                codeInput.placeholder = '카테고리를 먼저 선택하세요';
-                codeDisplay.innerHTML = '';
+                if (!isEditMode) { // ⭐ 새 등록 모드에서만 코드 초기화
+                    codeInput.value = '';
+                    codeInput.placeholder = '카테고리를 먼저 선택하세요';
+                    codeDisplay.innerHTML = '';
+                }
                 itemSelect.innerHTML = '<option value="">카테고리를 먼저 선택하세요 | សូមជ្រើសប្រភេទសិន</option>';
                 itemSelect.disabled = true;
                 return;
             }
             
-            // 자동 코드 생성
-            const prefix = codePrefixes[category];
-            const existingCodes = inventory
-                .filter(item => item.category === category)
-                .map(item => item.code)
-                .filter(code => code.startsWith(prefix + '-'))
-                .sort();
-            
-            let nextNumber = 1;
-            if (existingCodes.length > 0) {
-                const lastCode = existingCodes[existingCodes.length - 1];
-                const lastNumber = parseInt(lastCode.split('-')[1]);
-                if (!isNaN(lastNumber)) {
-                    nextNumber = lastNumber + 1;
+            // ⭐ 새 등록 모드에서만 자동 코드 생성
+            if (!isEditMode) {
+                const prefix = codePrefixes[category];
+                const existingCodes = inventory
+                    .filter(item => item.category === category)
+                    .map(item => item.code)
+                    .filter(code => code.startsWith(prefix + '-'))
+                    .sort();
+                
+                let nextNumber = 1;
+                if (existingCodes.length > 0) {
+                    const lastCode = existingCodes[existingCodes.length - 1];
+                    const lastNumber = parseInt(lastCode.split('-')[1]);
+                    if (!isNaN(lastNumber)) {
+                        nextNumber = lastNumber + 1;
+                    }
                 }
+                
+                const suggestedCode = `${prefix}-${String(nextNumber).padStart(3, '0')}`;
+                codeInput.value = suggestedCode;
+                codeInput.placeholder = `예: ${suggestedCode}`;
+                codeDisplay.innerHTML = `<span class="suggested-code">💡 추천: ${suggestedCode}</span>`;
+            } else {
+                // ⭐ 수정 모드에서는 기존 코드 유지하고 안내 메시지만 표시
+                codeDisplay.innerHTML = `<span class="suggested-code" style="background: #fef3c7; color: #92400e;">🔒 수정 모드에서는 코드를 변경할 수 없습니다</span>`;
             }
-            
-            const suggestedCode = `${prefix}-${String(nextNumber).padStart(3, '0')}`;
-            codeInput.value = suggestedCode;
-            codeInput.placeholder = `예: ${suggestedCode}`;
-            codeDisplay.innerHTML = `<span class="suggested-code">💡 추천: ${suggestedCode}</span>`;
             
             // 물품명 리스트 업데이트
             itemSelect.innerHTML = '<option value="">리스트에서 선택하거나 직접 입력 | ជ្រើសពីបញ្ជី ឬបញ្ចូលដោយដៃ</option>';
@@ -1353,17 +1361,17 @@
 
         function getCategoryName(category) {
             const names = {
-        'practice': '실습기자재<br><small>សម្ភារៈអនុវត្ត</small>',
-        'education-it': 'IT/전자기기<br><small>IT/អេឡិចត្រូនិច</small>',
-        'education-furniture': '가구<br><small>គ្រឿងសង្ហារឹម</small>',
-        'education-equipment': '기타교육기자재<br><small>ឧបករណ៍អប់រំផ្សេងៗ</small>',
-        'office': '사무용품<br><small>សម្ភារៈការិយាល័យ</small>',
-        'cleaning': '청소/위생용품<br><small>សម្ភារៈអនាម័យ</small>',
-        'books': '도서/교재<br><small>សៀវភៅ/សម្ភារៈសិក្សា</small>',
-        'warehouse': '창고<br><small>ឃ្លាំង</small>',
-        'other': '기타<br><small>ផ្សេងៗ</small>'
-    };
-    return names[category] || category;
+                'practice': '실습기자재<br><small>សម្ភារៈអនុវត្ត</small>',
+                'education-it': 'IT/전자기기<br><small>IT/អេឡិចត្រូនិច</small>',
+                'education-furniture': '가구<br><small>គ្រឿងសង្ហារឹម</small>',
+                'education-equipment': '기타교육기자재<br><small>ឧបករណ៍អប់រំផ្សេងៗ</small>',
+                'office': '사무용품<br><small>សម្ភារៈការិយាល័យ</small>',
+                'cleaning': '청소/위생용품<br><small>សម្ភារៈអនាម័យ</small>',
+                'books': '도서/교재<br><small>សៀវភៅ/សម្ភារៈសិក្សា</small>',
+                'warehouse': '창고<br><small>ឃ្លាំង</small>',
+                'other': '기타<br><small>ផ្សេងៗ</small>'
+            };
+            return names[category] || category;
         }
 
         function formatDate(dateString) {
@@ -1375,17 +1383,25 @@
             renderTable();
         }
 
+        // ⭐⭐⭐ 수정: 새 등록 모달 열기 (읽기 전용 해제) ⭐⭐⭐
         function openAddModal() {
             document.getElementById('modalTitle').textContent = '물품 등록';
             document.getElementById('modalTitleKhmer').textContent = 'បញ្ចូលសម្ភារៈ';
             document.getElementById('itemForm').reset();
             document.getElementById('itemId').value = '';
             document.getElementById('suggestedCodeDisplay').innerHTML = '';
+            
+            // ⭐ 새 등록 모드에서는 코드 입력 가능하도록 설정
+            document.getElementById('itemCode').readOnly = false;
+            document.getElementById('itemCode').style.backgroundColor = '';
+            document.getElementById('itemCode').style.cursor = '';
+            
             document.getElementById('itemNameSelect').innerHTML = '<option value="">카테고리를 먼저 선택하세요 | សូមជ្រើសប្រភេទសិន</option>';
             document.getElementById('itemNameSelect').disabled = true;
             document.getElementById('itemModal').classList.add('active');
         }
 
+        // ⭐⭐⭐ 수정: 수정 모달 열기 (물품코드 읽기 전용 설정) ⭐⭐⭐
         function editItem(id) {
             const item = inventory.find(i => i.id === id);
             if (!item) return;
@@ -1394,6 +1410,12 @@
             document.getElementById('modalTitleKhmer').textContent = 'កែសម្រួលសម្ភារៈ';
             document.getElementById('itemId').value = item.id;
             document.getElementById('itemCode').value = item.code;
+            
+            // ⭐ 수정 모드에서는 코드를 읽기 전용으로 설정
+            document.getElementById('itemCode').readOnly = true;
+            document.getElementById('itemCode').style.backgroundColor = '#f3f4f6';
+            document.getElementById('itemCode').style.cursor = 'not-allowed';
+            
             document.getElementById('itemCategory').value = item.category;
             document.getElementById('itemNameKo').value = item.nameKo || item.name.split(' | ')[0];
             document.getElementById('itemNameKh').value = item.nameKh || item.name.split(' | ')[1] || '';
