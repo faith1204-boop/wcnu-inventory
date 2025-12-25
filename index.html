@@ -1353,17 +1353,17 @@
 
         function getCategoryName(category) {
             const names = {
-                'practice': '실습기자재',
-                'education-it': 'IT/전자기기',
-                'education-furniture': '가구',
-                'education-equipment': '기타교육기자재',
-                'office': '사무용품',
-                'cleaning': '청소/위생용품',
-                'books': '도서/교재',
-                'warehouse': '창고',
-                'other': '기타'
-            };
-            return names[category] || category;
+        'practice': '실습기자재<br><small>សម្ភារៈអនុវត្ត</small>',
+        'education-it': 'IT/전자기기<br><small>IT/អេឡិចត្រូនិច</small>',
+        'education-furniture': '가구<br><small>គ្រឿងសង្ហារឹម</small>',
+        'education-equipment': '기타교육기자재<br><small>ឧបករណ៍អប់រំផ្សេងៗ</small>',
+        'office': '사무용품<br><small>សម្ភារៈការិយាល័យ</small>',
+        'cleaning': '청소/위생용품<br><small>សម្ភារៈអនាម័យ</small>',
+        'books': '도서/교재<br><small>សៀវភៅ/សម្ភារៈសិក្សា</small>',
+        'warehouse': '창고<br><small>ឃ្លាំង</small>',
+        'other': '기타<br><small>ផ្សេងៗ</small>'
+    };
+    return names[category] || category;
         }
 
         function formatDate(dateString) {
