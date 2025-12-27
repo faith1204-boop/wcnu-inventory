@@ -44,7 +44,6 @@
             opacity: 0.9;
         }
 
-        /* 탭 스타일 */
         .tabs {
             display: flex;
             background: #f8f9fa;
@@ -82,7 +81,6 @@
             display: block;
         }
 
-        /* 버튼 스타일 */
         .btn {
             padding: 12px 24px;
             border: none;
@@ -109,11 +107,15 @@
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
         }
 
-        /* 알림 스타일 */
+        .btn-warning {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            color: white;
+        }
+
         .alert {
             padding: 15px 20px;
             border-radius: 8px;
@@ -156,7 +158,6 @@
             60%, 100% { content: '...'; }
         }
 
-        /* 물품관리 섹션 스타일 */
         .controls {
             display: flex;
             gap: 15px;
@@ -214,7 +215,114 @@
             background: #f8f9fa;
         }
 
-        /* 이력카드 섹션 스타일 */
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover,
+        .close:focus {
+            opacity: 0.8;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        /* 이력카드 스타일 */
         .card-controls {
             background: #f8f9fa;
             padding: 25px;
@@ -311,6 +419,22 @@
                 display: block !important;
                 padding: 0 !important;
             }
+
+            .history-card {
+                page-break-after: always;
+                page-break-inside: avoid;
+                margin: 0;
+            }
+
+            .history-card:last-child {
+                page-break-after: auto;
+            }
+        }
+
+        @media screen {
+            .no-print {
+                display: block;
+            }
         }
     </style>
 </head>
@@ -322,7 +446,6 @@
             <p>Woojung Cambodia Nursing University - 통합 물품관리 시스템</p>
         </div>
 
-        <!-- 탭 메뉴 -->
         <div class="tabs">
             <button class="tab-button active" onclick="openTab('management')">
                 📦 물품 관리<br>
@@ -331,10 +454,6 @@
             <button class="tab-button" onclick="openTab('printcard')">
                 🖨️ 이력카드 출력<br>
                 <small>បោះពុម្ពកាតប្រវត្តិ</small>
-            </button>
-            <button class="tab-button" onclick="resetURL()" style="background: #dc3545; color: white;">
-                ⚙️ URL 재설정<br>
-                <small>កំណត់ URL ឡើងវិញ</small>
             </button>
         </div>
 
@@ -346,8 +465,9 @@
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="🔍 물품 검색 (코드, 이름)..." onkeyup="filterTable()">
                 </div>
+                <button class="btn btn-success" onclick="showAddModal()">➕ 물품 등록</button>
                 <button class="btn btn-primary" onclick="loadInventory()">🔄 새로고침</button>
-                <button class="btn btn-success" onclick="syncToCard()">🔗 이력카드와 동기화</button>
+                <button class="btn btn-warning" onclick="syncToCard()">🔗 이력카드와 동기화</button>
             </div>
 
             <div class="table-container">
@@ -359,15 +479,14 @@
                             <th>물품명(Khmer)</th>
                             <th>카테고리</th>
                             <th>현재고</th>
-                            <th>최소재고</th>
                             <th>위치</th>
                             <th>단가(USD)</th>
-                            <th>구매일자</th>
+                            <th>작업</th>
                         </tr>
                     </thead>
                     <tbody id="inventoryBody">
                         <tr>
-                            <td colspan="9" class="loading">데이터를 불러오는 중입니다</td>
+                            <td colspan="8" class="loading">데이터를 불러오는 중입니다</td>
                         </tr>
                     </tbody>
                 </table>
@@ -378,7 +497,7 @@
         <div id="printcard" class="tab-content">
             <div id="printAlert"></div>
             
-            <div class="card-controls">
+            <div class="card-controls no-print">
                 <div class="control-group">
                     <label>📋 출력 모드 선택</label>
                     <select id="printMode" onchange="changePrintMode()" style="width: 100%; max-width: 400px;">
@@ -389,7 +508,6 @@
                     </select>
                 </div>
 
-                <!-- 단일 출력 -->
                 <div id="singleCodeGroup" class="control-group">
                     <label>물품 코드 입력</label>
                     <div style="display: flex; gap: 10px;">
@@ -398,7 +516,6 @@
                     </div>
                 </div>
 
-                <!-- 범위 출력 -->
                 <div id="rangeCodeGroup" class="control-group" style="display: none;">
                     <label>코드 범위 입력</label>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -409,7 +526,6 @@
                     </div>
                 </div>
 
-                <!-- 카테고리 출력 -->
                 <div id="categoryGroup" class="control-group" style="display: none;">
                     <label>카테고리 선택</label>
                     <div style="display: flex; gap: 10px;">
@@ -424,8 +540,7 @@
 
                 <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
                     <button class="btn btn-success" onclick="window.print()">🖨️ 인쇄하기</button>
-                    <button class="btn btn-primary" onclick="loadPhotosFromGoogleSheets()">📸 사진 동기화</button>
-                    <button class="btn" style="background: #6c757d; color: white;" onclick="showAllCodes()">📋 전체 코드 보기</button>
+                    <button class="btn btn-primary" onclick="loadPhotosFromGoogle()">📸 사진 동기화</button>
                 </div>
             </div>
 
@@ -435,52 +550,103 @@
         </div>
     </div>
 
-    <script>
-        // ⭐⭐⭐ 구글 시트 Web App URL (브라우저에서 입력) ⭐⭐⭐
-        let GOOGLE_SCRIPT_URL = localStorage.getItem('googleScriptUrl') || '';
+    <!-- 물품 등록/수정 모달 -->
+    <div id="itemModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2 id="modalTitle">물품 등록</h2>
+            </div>
+            <div class="modal-body">
+                <form id="itemForm">
+                    <div class="form-group">
+                        <label>물품코드 *</label>
+                        <input type="text" id="itemCode" required placeholder="예: FUR-001">
+                    </div>
 
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>물품명(한글) *</label>
+                            <input type="text" id="itemNameKo" required placeholder="예: 학생 책상">
+                        </div>
+                        <div class="form-group">
+                            <label>물품명(Khmer) *</label>
+                            <input type="text" id="itemNameKh" required placeholder="ឧទាហរណ៍: តុសិក្សា">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>카테고리 *</label>
+                            <select id="itemCategory" required>
+                                <option value="">선택하세요</option>
+                                <option value="education-furniture">교육용 가구</option>
+                                <option value="education-it">IT 장비</option>
+                                <option value="education-equipment">교육 장비</option>
+                                <option value="practice">실습기자재</option>
+                                <option value="office">사무용품</option>
+                                <option value="cleaning">청소/위생용품</option>
+                                <option value="books">도서/교재</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>위치</label>
+                            <input type="text" id="itemLocation" placeholder="예: 101호">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>현재고</label>
+                            <input type="number" id="itemCurrentStock" value="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>최소재고</label>
+                            <input type="number" id="itemMinStock" value="0" min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>단가(USD)</label>
+                            <input type="number" id="itemPrice" value="0" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>구매일자</label>
+                            <input type="date" id="itemPurchaseDate">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>사진 URL</label>
+                        <input type="url" id="itemPhoto" placeholder="https://...">
+                    </div>
+
+                    <div class="form-group">
+                        <label>비고</label>
+                        <textarea id="itemNotes" rows="3" placeholder="추가 정보를 입력하세요"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" style="background: #6c757d; color: white;" onclick="closeModal()">취소</button>
+                <button type="button" class="btn btn-primary" onclick="saveItem()">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
         let inventory = [];
         let photoData = {};
         let currentTab = 'management';
-        
-        // 페이지 로드 시 URL 확인
-        window.addEventListener('DOMContentLoaded', function() {
-            if (!GOOGLE_SCRIPT_URL) {
-                showSetupPrompt();
-            } else {
-                loadInventory();
-            }
-        });
-        
-        // URL 설정 프롬프트
-        function showSetupPrompt() {
-            const url = prompt(
-                '🔧 초기 설정\n\n' +
-                'Google Apps Script 웹 앱 URL을 입력하세요:\n\n' +
-                '예시:\n' +
-                'https://script.google.com/macros/s/AKfycby.../exec\n\n' +
-                '※ Apps Script를 먼저 배포해야 합니다!'
-            );
-            
-            if (url && url.includes('script.google.com')) {
-                GOOGLE_SCRIPT_URL = url;
-                localStorage.setItem('googleScriptUrl', url);
-                alert('✅ URL이 저장되었습니다!\n\n데이터를 불러옵니다...');
-                loadInventory();
-            } else if (url) {
-                alert('❌ 올바른 Google Apps Script URL을 입력하세요!\n\n예시:\nhttps://script.google.com/macros/s/AKfycby.../exec');
-                showSetupPrompt();
-            }
-        }
-        
-        // URL 재설정
-        function resetURL() {
-            if (confirm('URL 설정을 초기화하시겠습니까?')) {
-                localStorage.removeItem('googleScriptUrl');
-                GOOGLE_SCRIPT_URL = '';
-                location.reload();
-            }
-        }
+        let editMode = false;
+        let editingCode = '';
+
+        // 페이지 로드 시 데이터 로드
+        window.onload = function() {
+            console.log('🏥 우정캄보디아 간호대학교 - 물품관리 시스템');
+            loadInventory();
+        };
 
         // 탭 전환
         function openTab(tabName) {
@@ -493,10 +659,6 @@
             document.getElementById(tabName).classList.add('active');
             event.target.classList.add('active');
             currentTab = tabName;
-            
-            if (tabName === 'management' && inventory.length === 0) {
-                loadInventory();
-            }
         }
 
         // 알림 표시
@@ -507,24 +669,25 @@
         }
 
         // 물품 데이터 로드
-        async function loadInventory() {
-            try {
-                showAlert('데이터를 불러오는 중...', 'info');
-                
-                const response = await fetch(GOOGLE_SCRIPT_URL);
-                const result = await response.json();
-                
-                if (result.success && result.data) {
-                    inventory = result.data;
-                    renderTable(inventory);
-                    showAlert(`✅ ${inventory.length}개 물품 로드 완료!`, 'success');
-                } else {
-                    throw new Error(result.error || '데이터 로드 실패');
-                }
-            } catch (error) {
-                console.error('로드 오류:', error);
-                showAlert('❌ 데이터 로드 실패: ' + error.message, 'error');
-            }
+        function loadInventory() {
+            showAlert('데이터를 불러오는 중...', 'info');
+            
+            google.script.run
+                .withSuccessHandler(function(result) {
+                    console.log('서버 응답:', result);
+                    if (result.success && result.data) {
+                        inventory = result.data;
+                        renderTable(inventory);
+                        showAlert(`✅ ${inventory.length}개 물품 로드 완료!`, 'success');
+                    } else {
+                        showAlert('❌ 데이터 로드 실패: ' + (result.error || '알 수 없는 오류'), 'error');
+                    }
+                })
+                .withFailureHandler(function(error) {
+                    console.error('로드 오류:', error);
+                    showAlert('❌ 서버 오류: ' + error.message, 'error');
+                })
+                .getData();
         }
 
         // 테이블 렌더링
@@ -532,7 +695,7 @@
             const tbody = document.getElementById('inventoryBody');
             
             if (data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">물품이 없습니다</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">물품이 없습니다</td></tr>';
                 return;
             }
             
@@ -541,12 +704,16 @@
                     <td><strong>${item['물품코드'] || '-'}</strong></td>
                     <td>${item['물품명(한글)'] || '-'}</td>
                     <td style="font-family: 'Noto Sans Khmer'">${item['물품명(Khmer)'] || '-'}</td>
-                    <td>${item['카테고리'] || '-'}</td>
+                    <td>${getCategoryName(item['카테고리'])}</td>
                     <td>${item['현재고'] || 0}</td>
-                    <td>${item['최소재고'] || 0}</td>
                     <td>${item['위치'] || '-'}</td>
                     <td>$${Number(item['단가(USD)'] || 0).toLocaleString()}</td>
-                    <td>${item['구매일자'] || '-'}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm" onclick='editItem(${JSON.stringify(item).replace(/'/g, "&#39;")})'>수정</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteItem('${item['물품코드']}')">삭제</button>
+                        </div>
+                    </td>
                 </tr>
             `).join('');
         }
@@ -563,13 +730,133 @@
             renderTable(filtered);
         }
 
+        // 물품 등록 모달 열기
+        function showAddModal() {
+            editMode = false;
+            document.getElementById('modalTitle').textContent = '물품 등록';
+            document.getElementById('itemForm').reset();
+            document.getElementById('itemCode').readOnly = false;
+            document.getElementById('itemModal').style.display = 'block';
+        }
+
+        // 물품 수정 모달 열기
+        function editItem(item) {
+            editMode = true;
+            editingCode = item['물품코드'];
+            document.getElementById('modalTitle').textContent = '물품 수정';
+            
+            document.getElementById('itemCode').value = item['물품코드'];
+            document.getElementById('itemCode').readOnly = true;
+            document.getElementById('itemNameKo').value = item['물품명(한글)'] || '';
+            document.getElementById('itemNameKh').value = item['물품명(Khmer)'] || '';
+            document.getElementById('itemCategory').value = item['카테고리'] || '';
+            document.getElementById('itemLocation').value = item['위치'] || '';
+            document.getElementById('itemCurrentStock').value = item['현재고'] || 0;
+            document.getElementById('itemMinStock').value = item['최소재고'] || 0;
+            document.getElementById('itemPrice').value = item['단가(USD)'] || 0;
+            document.getElementById('itemPurchaseDate').value = item['구매일자'] || '';
+            document.getElementById('itemPhoto').value = item['사진'] || '';
+            document.getElementById('itemNotes').value = item['비고'] || '';
+            
+            document.getElementById('itemModal').style.display = 'block';
+        }
+
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('itemModal').style.display = 'none';
+        }
+
+        // 물품 저장
+        function saveItem() {
+            const item = {
+                '물품코드': document.getElementById('itemCode').value.trim().toUpperCase(),
+                '물품명(한글)': document.getElementById('itemNameKo').value.trim(),
+                '물품명(Khmer)': document.getElementById('itemNameKh').value.trim(),
+                '카테고리': document.getElementById('itemCategory').value,
+                '위치': document.getElementById('itemLocation').value.trim(),
+                '현재고': document.getElementById('itemCurrentStock').value,
+                '최소재고': document.getElementById('itemMinStock').value,
+                '단가(USD)': document.getElementById('itemPrice').value,
+                '구매일자': document.getElementById('itemPurchaseDate').value,
+                '사진': document.getElementById('itemPhoto').value.trim(),
+                '비고': document.getElementById('itemNotes').value.trim()
+            };
+
+            if (!item['물품코드'] || !item['물품명(한글)'] || !item['물품명(Khmer)'] || !item['카테고리']) {
+                alert('필수 항목을 모두 입력하세요!');
+                return;
+            }
+
+            showAlert('저장 중...', 'info');
+
+            if (editMode) {
+                // 수정
+                google.script.run
+                    .withSuccessHandler(function(result) {
+                        if (result.success) {
+                            showAlert('✅ ' + result.message, 'success');
+                            closeModal();
+                            loadInventory();
+                        } else {
+                            showAlert('❌ ' + result.error, 'error');
+                        }
+                    })
+                    .withFailureHandler(function(error) {
+                        showAlert('❌ 오류: ' + error.message, 'error');
+                    })
+                    .updateItemFromClient(item);
+            } else {
+                // 등록
+                google.script.run
+                    .withSuccessHandler(function(result) {
+                        if (result.success) {
+                            showAlert('✅ ' + result.message, 'success');
+                            closeModal();
+                            loadInventory();
+                        } else {
+                            showAlert('❌ ' + result.error, 'error');
+                        }
+                    })
+                    .withFailureHandler(function(error) {
+                        showAlert('❌ 오류: ' + error.message, 'error');
+                    })
+                    .addItemFromClient(item);
+            }
+        }
+
+        // 물품 삭제
+        function deleteItem(code) {
+            if (!confirm(`정말로 물품 "${code}"을(를) 삭제하시겠습니까?`)) {
+                return;
+            }
+
+            showAlert('삭제 중...', 'info');
+
+            google.script.run
+                .withSuccessHandler(function(result) {
+                    if (result.success) {
+                        showAlert('✅ ' + result.message, 'success');
+                        loadInventory();
+                    } else {
+                        showAlert('❌ ' + result.error, 'error');
+                    }
+                })
+                .withFailureHandler(function(error) {
+                    showAlert('❌ 오류: ' + error.message, 'error');
+                })
+                .deleteItemFromClient(code);
+        }
+
         // 이력카드와 동기화
         function syncToCard() {
             if (inventory.length === 0) {
                 showAlert('먼저 물품 데이터를 로드하세요!', 'error');
                 return;
             }
-            openTab('printcard');
+            
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons[1].click();
+            
             showAlert('✅ 물품 데이터가 동기화되었습니다!', 'success', 'printAlert');
         }
 
@@ -579,7 +866,11 @@
             const names = {
                 'education-furniture': '교육용 가구',
                 'education-it': 'IT 장비',
-                'education-equipment': '교육 장비'
+                'education-equipment': '교육 장비',
+                'practice': '실습기자재',
+                'office': '사무용품',
+                'cleaning': '청소/위생용품',
+                'books': '도서/교재'
             };
             return names[category] || category;
         }
@@ -673,7 +964,7 @@
                 day: '2-digit'
             }).replace(/\. /g, '/').replace('.', '');
 
-            const photoUrl = photoData[item['물품코드']] || '';
+            const photoUrl = photoData[item['물품코드']] || item['사진'] || '';
             const categoryName = getCategoryName(item['카테고리']);
 
             card.innerHTML = `
@@ -738,39 +1029,31 @@
             return card;
         }
 
-        async function loadPhotosFromGoogleSheets() {
-            try {
-                showAlert('사진 데이터를 불러오는 중...', 'info', 'printAlert');
-                
-                const response = await fetch(GOOGLE_SCRIPT_URL + '?action=getPhotos');
-                const data = await response.json();
-                
-                if (data && data.photos) {
-                    photoData = data.photos;
-                    showAlert(`✅ 사진 ${Object.keys(photoData).length}개 로드 완료!`, 'success', 'printAlert');
-                } else {
-                    showAlert('⚠️ 사진 데이터를 찾을 수 없습니다', 'error', 'printAlert');
-                }
-                
-            } catch (error) {
-                console.error('사진 로드 에러:', error);
-                showAlert('❌ 사진 데이터 로드 실패: ' + error.message, 'error', 'printAlert');
-            }
-        }
-
-        function showAllCodes() {
-            if (inventory.length === 0) {
-                alert('먼저 물품 데이터를 로드하세요!');
-                return;
-            }
+        function loadPhotosFromGoogle() {
+            showAlert('사진 데이터를 불러오는 중...', 'info', 'printAlert');
             
-            const codes = inventory.map(item => item['물품코드']).sort();
-            alert(`📋 등록된 물품 코드 목록 (총 ${codes.length}개)\n\n${codes.join(', ')}`);
+            google.script.run
+                .withSuccessHandler(function(result) {
+                    if (result.success && result.photos) {
+                        photoData = result.photos;
+                        showAlert(`✅ 사진 ${Object.keys(photoData).length}개 로드 완료!`, 'success', 'printAlert');
+                    } else {
+                        showAlert('⚠️ 사진 데이터를 찾을 수 없습니다', 'error', 'printAlert');
+                    }
+                })
+                .withFailureHandler(function(error) {
+                    showAlert('❌ 사진 로드 실패: ' + error.message, 'error', 'printAlert');
+                })
+                .getPhotos();
         }
 
-        // 콘솔 로그
-        console.log('🏥 우정캄보디아 간호대학교 - 통합 물품관리 시스템');
-        console.log('URL 설정:', GOOGLE_SCRIPT_URL ? '✅ 설정됨' : '❌ 미설정');
+        // 모달 외부 클릭 시 닫기
+        window.onclick = function(event) {
+            const modal = document.getElementById('itemModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
     </script>
 </body>
 </html>
