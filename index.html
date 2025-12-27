@@ -332,6 +332,10 @@
                 🖨️ 이력카드 출력<br>
                 <small>បោះពុម្ពកាតប្រវត្តិ</small>
             </button>
+            <button class="tab-button" onclick="resetURL()" style="background: #dc3545; color: white;">
+                ⚙️ URL 재설정<br>
+                <small>កំណត់ URL ឡើងវិញ</small>
+            </button>
         </div>
 
         <!-- 물품 관리 탭 -->
@@ -432,12 +436,51 @@
     </div>
 
     <script>
-        // ⭐⭐⭐ 구글 시트 Web App URL (배포 후 입력) ⭐⭐⭐
-        const GOOGLE_SCRIPT_URL = 'YOUR_WEB_APP_URL_HERE';
+        // ⭐⭐⭐ 구글 시트 Web App URL (브라우저에서 입력) ⭐⭐⭐
+        let GOOGLE_SCRIPT_URL = localStorage.getItem('googleScriptUrl') || '';
 
         let inventory = [];
         let photoData = {};
         let currentTab = 'management';
+        
+        // 페이지 로드 시 URL 확인
+        window.addEventListener('DOMContentLoaded', function() {
+            if (!GOOGLE_SCRIPT_URL) {
+                showSetupPrompt();
+            } else {
+                loadInventory();
+            }
+        });
+        
+        // URL 설정 프롬프트
+        function showSetupPrompt() {
+            const url = prompt(
+                '🔧 초기 설정\n\n' +
+                'Google Apps Script 웹 앱 URL을 입력하세요:\n\n' +
+                '예시:\n' +
+                'https://script.google.com/macros/s/AKfycby.../exec\n\n' +
+                '※ Apps Script를 먼저 배포해야 합니다!'
+            );
+            
+            if (url && url.includes('script.google.com')) {
+                GOOGLE_SCRIPT_URL = url;
+                localStorage.setItem('googleScriptUrl', url);
+                alert('✅ URL이 저장되었습니다!\n\n데이터를 불러옵니다...');
+                loadInventory();
+            } else if (url) {
+                alert('❌ 올바른 Google Apps Script URL을 입력하세요!\n\n예시:\nhttps://script.google.com/macros/s/AKfycby.../exec');
+                showSetupPrompt();
+            }
+        }
+        
+        // URL 재설정
+        function resetURL() {
+            if (confirm('URL 설정을 초기화하시겠습니까?')) {
+                localStorage.removeItem('googleScriptUrl');
+                GOOGLE_SCRIPT_URL = '';
+                location.reload();
+            }
+        }
 
         // 탭 전환
         function openTab(tabName) {
@@ -725,11 +768,9 @@
             alert(`📋 등록된 물품 코드 목록 (총 ${codes.length}개)\n\n${codes.join(', ')}`);
         }
 
-        // 초기화
-        window.onload = function() {
-            console.log('🏥 우정캄보디아 간호대학교 - 통합 물품관리 시스템');
-            loadInventory();
-        };
+        // 콘솔 로그
+        console.log('🏥 우정캄보디아 간호대학교 - 통합 물품관리 시스템');
+        console.log('URL 설정:', GOOGLE_SCRIPT_URL ? '✅ 설정됨' : '❌ 미설정');
     </script>
 </body>
 </html>
