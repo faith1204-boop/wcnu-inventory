@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>우정캄보디아 간호대학교 - 통합 물품관리 시스템</title>
+    <title>우정캄보디아 간호대학교 - 물품 관리 시스템</title>
     <style>
         * {
             margin: 0;
@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans Khmer', sans-serif;
+            font-family: 'Segoe UI', 'Malgun Gothic', 'Khmer OS Siemreap', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
@@ -23,7 +23,7 @@
             margin: 0 auto;
             background: white;
             border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             overflow: hidden;
         }
 
@@ -37,125 +37,54 @@
         .header h1 {
             font-size: 28px;
             margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .header .khmer {
+            font-size: 22px;
+            opacity: 0.95;
+            margin-top: 5px;
         }
 
         .header p {
             font-size: 14px;
             opacity: 0.9;
+            margin-top: 5px;
         }
 
-        .tabs {
-            display: flex;
-            background: #f8f9fa;
-            border-bottom: 3px solid #667eea;
-        }
-
-        .tab-button {
-            flex: 1;
-            padding: 20px;
-            background: none;
-            border: none;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: #666;
-        }
-
-        .tab-button:hover {
-            background: #e9ecef;
-        }
-
-        .tab-button.active {
-            background: white;
-            color: #667eea;
-            border-bottom: 3px solid #667eea;
-        }
-
-        .tab-content {
-            display: none;
+        .main-content {
             padding: 30px;
         }
 
-        .tab-content.active {
-            display: block;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
+        .stat-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            color: white;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
-        .btn-warning {
-            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
-            color: white;
-        }
-
-        .alert {
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .alert-info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-
-        .loading {
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
-            padding: 40px;
-            font-size: 18px;
-            color: #667eea;
         }
 
-        .loading::after {
-            content: '...';
-            animation: dots 1.5s steps(4, end) infinite;
+        .stat-card h3 {
+            font-size: 32px;
+            margin-bottom: 5px;
         }
 
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60%, 100% { content: '...'; }
+        .stat-card p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .stat-card .khmer {
+            font-size: 12px;
+            opacity: 0.85;
+            margin-top: 3px;
         }
 
         .controls {
@@ -163,17 +92,68 @@
             gap: 15px;
             margin-bottom: 25px;
             flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex-direction: column;
+            line-height: 1.4;
+        }
+
+        .btn .khmer {
+            font-size: 11px;
+            font-weight: normal;
+            opacity: 0.9;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
         }
 
         .search-box {
             flex: 1;
-            min-width: 200px;
+            min-width: 250px;
+            position: relative;
         }
 
         .search-box input {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #ddd;
+            padding: 12px 40px 12px 15px;
+            border: 2px solid #e5e7eb;
             border-radius: 8px;
             font-size: 14px;
         }
@@ -183,10 +163,41 @@
             border-color: #667eea;
         }
 
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        select {
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            background: white;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        optgroup {
+            font-weight: bold;
+            font-style: normal;
+            color: #1e3c72;
+        }
+
+        optgroup option {
+            font-weight: normal;
+            padding-left: 20px;
+        }
+
         .table-container {
             overflow-x: auto;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
         }
 
         table {
@@ -196,62 +207,188 @@
         }
 
         thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #dee2e6;
+            background: #f9fafb;
         }
 
         th {
+            padding: 15px;
+            text-align: left;
             font-weight: 600;
-            font-size: 14px;
+            color: #374151;
+            border-bottom: 2px solid #e5e7eb;
+            white-space: nowrap;
         }
 
-        tbody tr:hover {
-            background: #f8f9fa;
+        th .khmer {
+            display: block;
+            font-size: 11px;
+            font-weight: normal;
+            color: #6b7280;
+            margin-top: 3px;
         }
 
-        /* 모달 스타일 */
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #6b7280;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge .khmer {
+            font-size: 10px;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .badge-practice {
+            background: #fce7f3;
+            color: #9f1239;
+        }
+
+        .badge-education-it {
+            background: #ddd6fe;
+            color: #5b21b6;
+        }
+
+        .badge-education-furniture {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .badge-education-equipment {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-office {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-cleaning {
+            background: #ccfbf1;
+            color: #115e59;
+        }
+
+        .badge-books {
+            background: #fed7aa;
+            color: #9a3412;
+        }
+
+        .badge-warehouse {
+            background: #fef9c3;
+            color: #854d0e;
+        }
+
+        .badge-other {
+            background: #f3e8ff;
+            color: #6b21a8;
+        }
+
+        .status-good {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .status-low {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        .status-critical {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+            flex-direction: row;
+        }
+
+        .btn-small .khmer {
+            font-size: 10px;
+        }
+
         .modal {
             display: none;
             position: fixed;
-            z-index: 1000;
-            left: 0;
             top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
         }
 
         .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 0;
+            background: white;
             border-radius: 15px;
-            width: 90%;
+            padding: 30px;
             max-width: 700px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
         }
 
         .modal-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px 30px;
-            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
         .modal-header h2 {
-            margin: 0;
-            font-size: 24px;
+            color: #1f2937;
+            line-height: 1.4;
         }
 
-        .modal-body {
-            padding: 30px;
+        .modal-header .khmer {
+            font-size: 16px;
+            color: #6b7280;
+            font-weight: normal;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close-btn:hover {
+            background: #f3f4f6;
         }
 
         .form-group {
@@ -260,9 +397,19 @@
 
         .form-group label {
             display: block;
-            font-weight: 600;
             margin-bottom: 8px;
-            color: #333;
+            color: #374151;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .form-group label .khmer {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: normal;
+            display: block;
+            margin-top: 2px;
         }
 
         .form-group input,
@@ -270,7 +417,7 @@
         .form-group textarea {
             width: 100%;
             padding: 12px 15px;
-            border: 2px solid #ddd;
+            border: 2px solid #e5e7eb;
             border-radius: 8px;
             font-size: 14px;
             font-family: inherit;
@@ -281,7 +428,11 @@
         .form-group textarea:focus {
             outline: none;
             border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
         }
 
         .form-row {
@@ -290,767 +441,1094 @@
             gap: 15px;
         }
 
-        .modal-footer {
-            padding: 20px 30px;
-            border-top: 1px solid #dee2e6;
+        .form-actions {
             display: flex;
-            justify-content: flex-end;
             gap: 10px;
+            justify-content: flex-end;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
         }
 
-        .close {
-            color: white;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 1;
-        }
-
-        .close:hover,
-        .close:focus {
-            opacity: 0.8;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 5px;
-        }
-
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 12px;
-        }
-
-        /* 이력카드 스타일 */
-        .card-controls {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-        }
-
-        .control-group {
-            margin-bottom: 20px;
-        }
-
-        .control-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
-            font-size: 14px;
-        }
-
-        select, input[type="text"] {
-            padding: 10px 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        select:focus, input[type="text"]:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .history-card {
-            width: 210mm;
-            height: 297mm;
-            margin: 0 auto 30px;
-            padding: 20mm;
-            background: white;
-            border: 2px solid #333;
-            page-break-after: always;
-            position: relative;
-        }
-
-        .card-title {
+        .empty-state {
             text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            border-bottom: 3px double #000;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            padding: 60px 20px;
+            color: #6b7280;
         }
 
-        .info-table {
+        .empty-state h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        .empty-state .khmer {
+            font-size: 13px;
+            margin-top: 5px;
+            color: #9ca3af;
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 15px;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
         }
 
-        .info-table td, .info-table th {
-            border: 1px solid #000;
-            padding: 10px;
-            font-size: 12px;
+        .loading-overlay.active {
+            display: flex;
         }
 
-        .info-table th {
-            background: #e9ecef;
-            font-weight: 600;
+        .loading-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
             text-align: center;
-            width: 120px;
         }
 
-        @media print {
-            @page {
-                size: A4;
-                margin: 0;
-            }
-
-            body {
-                background: white;
-                padding: 0;
-            }
-
-            .container {
-                box-shadow: none;
-                border-radius: 0;
-            }
-
-            .header, .tabs, .controls, .card-controls {
-                display: none !important;
-            }
-
-            .tab-content {
-                display: block !important;
-                padding: 0 !important;
-            }
-
-            .history-card {
-                page-break-after: always;
-                page-break-inside: avoid;
-                margin: 0;
-            }
-
-            .history-card:last-child {
-                page-break-after: auto;
-            }
+        .spinner {
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
         }
 
-        @media screen {
-            .no-print {
-                display: block;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .suggested-code {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                padding: 10px 20px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- 로딩 오버레이 -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h3>처리 중입니다...</h3>
+            <p style="margin-top: 10px; color: #6b7280;">잠시만 기다려주세요</p>
+        </div>
+    </div>
+
     <div class="container">
         <div class="header">
             <h1>🏥 우정캄보디아 간호대학교</h1>
-            <p>សាកលវិទ្យាល័យគិលានុបដ្ឋាយិកាកម្ពុជា</p>
-            <p>Woojung Cambodia Nursing University - 통합 물품관리 시스템</p>
+            <div class="khmer">សាកលវិទ្យាល័យគិលានុបដ្ឋាយិកាវ៉ូជុងកម្ពុជា</div>
+            <p>물품 관리 시스템 | ប្រព័ន្ធគ្រប់គ្រងសម្ភារៈ</p>
         </div>
 
-        <div class="tabs">
-            <button class="tab-button active" onclick="openTab('management')">
-                📦 물품 관리<br>
-                <small>ការគ្រប់គ្រងសម្ភារៈ</small>
-            </button>
-            <button class="tab-button" onclick="openTab('printcard')">
-                🖨️ 이력카드 출력<br>
-                <small>បោះពុម្ពកាតប្រវត្តិ</small>
-            </button>
-        </div>
-
-        <!-- 물품 관리 탭 -->
-        <div id="management" class="tab-content active">
-            <div id="managementAlert"></div>
-            
-            <div class="controls">
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="🔍 물품 검색 (코드, 이름)..." onkeyup="filterTable()">
+        <div class="main-content">
+            <!-- 통계 카드 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="totalItems">0</h3>
+                    <p>총 물품 수</p>
+                    <div class="khmer">ចំនួនសម្ភារៈសរុប</div>
                 </div>
-                <button class="btn btn-success" onclick="showAddModal()">➕ 물품 등록</button>
-                <button class="btn btn-primary" onclick="loadInventory()">🔄 새로고침</button>
-                <button class="btn btn-warning" onclick="syncToCard()">🔗 이력카드와 동기화</button>
+                <div class="stat-card">
+                    <h3 id="totalQuantity">0</h3>
+                    <p>총 재고 수량</p>
+                    <div class="khmer">បរិមាណសរុប</div>
+                </div>
+                <div class="stat-card">
+                    <h3 id="lowStockCount">0</h3>
+                    <p>재고 부족 품목</p>
+                    <div class="khmer">ទំនិញខ្វះស្តុក</div>
+                </div>
+                <div class="stat-card">
+                    <h3 id="categoryCount">0</h3>
+                    <p>카테고리 수</p>
+                    <div class="khmer">ចំនួនប្រភេទ</div>
+                </div>
             </div>
 
+            <!-- 컨트롤 버튼 -->
+            <div class="controls">
+                <button class="btn btn-primary" onclick="openAddModal()">
+                    <span>➕ 물품 등록</span>
+                    <span class="khmer">បញ្ចូលសម្ភារៈថ្មី</span>
+                </button>
+                <button class="btn btn-success" onclick="exportToExcel()">
+                    <span>📊 Excel 내보내기</span>
+                    <span class="khmer">នាំចេញជា Excel</span>
+                </button>
+                <button class="btn btn-success" onclick="loadFromGoogleSheets()">
+                    <span>🔄 새로고침</span>
+                    <span class="khmer">ផ្ទុកឡើងវិញ</span>
+                </button>
+                
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="물품명, 코드, 위치로 검색... | ស្វែងរកតាមឈ្មោះ កូដ ទីតាំង..." onkeyup="filterTable()">
+                </div>
+
+                <div class="filter-group">
+                    <select id="categoryFilter" onchange="filterTable()">
+                        <option value="">전체 카테고리 | ប្រភេទទាំងអស់</option>
+                        <option value="practice">실습기자재 | សម្ភារៈអនុវត្ត</option>
+                        <optgroup label="📚 교육기자재 | ឧបករណ៍អប់រំ">
+                            <option value="education-it">  ├ IT/전자기기 | IT/អេឡិចត្រូនិច</option>
+                            <option value="education-furniture">  ├ 가구 | គ្រឿងសង្ហារឹម</option>
+                            <option value="education-equipment">  └ 기타교육기자재 | ឧបករណ៍អប់រំផ្សេងៗ</option>
+                        </optgroup>
+                        <option value="office">사무용품 | សម្ភារៈការិយាល័យ</option>
+                        <option value="cleaning">청소/위생용품 | សម្ភារៈអនាម័យ</option>
+                        <option value="books">도서/교재 | សៀវភៅ/សម្ភារៈសិក្សា</option>
+                        <option value="warehouse">창고 | ឃ្លាំង</option>
+                        <option value="other">기타 | ផ្សេងៗ</option>
+                    </select>
+
+                    <select id="statusFilter" onchange="filterTable()">
+                        <option value="">전체 상태 | ស្ថានភាពទាំងអស់</option>
+                        <option value="good">정상 | ធម្មតា</option>
+                        <option value="low">부족 | ខ្វះ</option>
+                        <option value="critical">긴급 | បន្ទាន់</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 물품 테이블 -->
             <div class="table-container">
                 <table id="inventoryTable">
                     <thead>
                         <tr>
-                            <th>물품코드</th>
-                            <th>물품명(한글)</th>
-                            <th>물품명(Khmer)</th>
-                            <th>카테고리</th>
-                            <th>현재고</th>
-                            <th>위치</th>
-                            <th>단가(USD)</th>
-                            <th>작업</th>
+                            <th>물품코드<div class="khmer">លេខកូដ</div></th>
+                            <th>물품명<div class="khmer">ឈ្មោះសម្ភារៈ</div></th>
+                            <th>카테고리<div class="khmer">ប្រភេទ</div></th>
+                            <th>현재고<div class="khmer">ស្តុកបច្ចុប្បន្ន</div></th>
+                            <th>최소재고<div class="khmer">ស្តុកអប្បបរមា</div></th>
+                            <th>상태<div class="khmer">ស្ថានភាព</div></th>
+                            <th>위치<div class="khmer">ទីតាំង</div></th>
+                            <th>등록일<div class="khmer">កាលបរិច្ឆេទ</div></th>
+                            <th>관리<div class="khmer">គ្រប់គ្រង</div></th>
                         </tr>
                     </thead>
                     <tbody id="inventoryBody">
-                        <tr>
-                            <td colspan="8" class="loading">데이터를 불러오는 중입니다</td>
-                        </tr>
+                        <!-- 데이터가 여기에 추가됩니다 -->
                     </tbody>
                 </table>
             </div>
         </div>
+    </div>
 
-        <!-- 이력카드 출력 탭 -->
-        <div id="printcard" class="tab-content">
-            <div id="printAlert"></div>
-            
-            <div class="card-controls no-print">
-                <div class="control-group">
-                    <label>📋 출력 모드 선택</label>
-                    <select id="printMode" onchange="changePrintMode()" style="width: 100%; max-width: 400px;">
-                        <option value="single">단일 물품 출력</option>
-                        <option value="range">범위 출력 (코드 범위)</option>
-                        <option value="category">카테고리별 출력</option>
-                        <option value="all">전체 출력</option>
+    <!-- 물품 추가/수정 모달 -->
+    <div class="modal" id="itemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h2 id="modalTitle">물품 등록</h2>
+                    <div class="khmer" id="modalTitleKhmer">បញ្ចូលសម្ភារៈ</div>
+                </div>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <form id="itemForm" onsubmit="saveItem(event)">
+                <input type="hidden" id="itemId">
+                
+                <div class="form-group">
+                    <label>카테고리 *<span class="khmer">ប្រភេទ</span></label>
+                    <select id="itemCategory" required onchange="updateCodeAndItems()">
+                        <option value="">선택하세요 | សូមជ្រើសរើស</option>
+                        <option value="practice">실습기자재 | សម្ភារៈអនុវត្ត</option>
+                        <optgroup label="📚 교육기자재 | ឧបករណ៍អប់រំ">
+                            <option value="education-it">  ├ IT/전자기기 | IT/អេឡិចត្រូនិច</option>
+                            <option value="education-furniture">  ├ 가구 | គ្រឿងសង្ហារឹម</option>
+                            <option value="education-equipment">  └ 기타교육기자재 | ឧបករណ៍អប់រំផ្សេងៗ</option>
+                        </optgroup>
+                        <option value="office">사무용품 | សម្ភារៈការិយាល័យ</option>
+                        <option value="cleaning">청소/위생용품 | សម្ភារៈអនាម័យ</option>
+                        <option value="books">도서/교재 | សៀវភៅ/សម្ភារៈសិក្សា</option>
+                        <option value="warehouse">창고 | ឃ្លាំង</option>
+                        <option value="other">기타 | ផ្សេងៗ</option>
                     </select>
                 </div>
 
-                <div id="singleCodeGroup" class="control-group">
-                    <label>물품 코드 입력</label>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="singleCode" placeholder="예: FUR-001" style="flex: 1; max-width: 300px;">
-                        <button class="btn btn-primary" onclick="loadSingleCard()">카드 불러오기</button>
-                    </div>
+                <div class="form-group">
+                    <label>물품 코드 *<span class="khmer">លេខកូដសម្ភារៈ</span></label>
+                    <input type="text" id="itemCode" required placeholder="카테고리를 먼저 선택하세요">
+                    <div id="suggestedCodeDisplay"></div>
                 </div>
 
-                <div id="rangeCodeGroup" class="control-group" style="display: none;">
-                    <label>코드 범위 입력</label>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <input type="text" id="startCode" placeholder="시작 코드 (예: FUR-001)" style="width: 200px;">
-                        <span style="align-self: center;">~</span>
-                        <input type="text" id="endCode" placeholder="종료 코드 (예: FUR-010)" style="width: 200px;">
-                        <button class="btn btn-primary" onclick="loadRangeCards()">카드 불러오기</button>
-                    </div>
+                <div class="form-group">
+                    <label>물품명 선택<span class="khmer">ជ្រើសរើសសម្ភារៈ</span></label>
+                    <select id="itemNameSelect" onchange="selectItemFromList()">
+                        <option value="">카테고리를 먼저 선택하세요 | សូមជ្រើសប្រភេទសិន</option>
+                    </select>
                 </div>
 
-                <div id="categoryGroup" class="control-group" style="display: none;">
-                    <label>카테고리 선택</label>
-                    <div style="display: flex; gap: 10px;">
-                        <select id="categorySelect" style="flex: 1; max-width: 300px;">
-                            <option value="education-furniture">교육용 가구</option>
-                            <option value="education-it">IT 장비</option>
-                            <option value="education-equipment">교육 장비</option>
-                        </select>
-                        <button class="btn btn-primary" onclick="loadCategoryCards()">카드 불러오기</button>
-                    </div>
+                <div class="form-group">
+                    <label>또는 직접 입력<span class="khmer">ឬបញ្ចូលដោយដៃ</span></label>
                 </div>
 
-                <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button class="btn btn-success" onclick="window.print()">🖨️ 인쇄하기</button>
-                    <button class="btn btn-primary" onclick="loadPhotosFromGoogle()">📸 사진 동기화</button>
+                <div class="form-group">
+                    <label>물품명 (한글) *<span class="khmer">ឈ្មោះសម្ភារៈ (កូរ៉េ)</span></label>
+                    <input type="text" id="itemNameKo" required placeholder="예: 혈압계">
                 </div>
-            </div>
 
-            <div id="previewSection" style="max-height: 70vh; overflow-y: auto;">
-                <div class="loading">출력 모드를 선택하고 물품을 불러오세요</div>
-            </div>
-        </div>
-    </div>
+                <div class="form-group">
+                    <label>물품명 (크메르)<span class="khmer">ឈ្មោះសម្ភារៈ (ខ្មែរ)</span></label>
+                    <input type="text" id="itemNameKh" placeholder="예: ឧបករណ៍វាស់សម្ពាធឈាម">
+                </div>
 
-    <!-- 물품 등록/수정 모달 -->
-    <div id="itemModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close" onclick="closeModal()">&times;</span>
-                <h2 id="modalTitle">물품 등록</h2>
-            </div>
-            <div class="modal-body">
-                <form id="itemForm">
+                <div class="form-group">
+                    <label>위치 *<span class="khmer">ទីតាំង</span></label>
+                    <input type="text" id="itemLocation" required placeholder="예: 3층 간호실습실">
+                </div>
+
+                <div class="form-row">
                     <div class="form-group">
-                        <label>물품코드 *</label>
-                        <input type="text" id="itemCode" required placeholder="예: FUR-001">
+                        <label>현재고 *<span class="khmer">ស្តុកបច្ចុប្បន្ន</span></label>
+                        <input type="number" id="itemQuantity" required min="0" placeholder="0">
                     </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>물품명(한글) *</label>
-                            <input type="text" id="itemNameKo" required placeholder="예: 학생 책상">
-                        </div>
-                        <div class="form-group">
-                            <label>물품명(Khmer) *</label>
-                            <input type="text" id="itemNameKh" required placeholder="ឧទាហរណ៍: តុសិក្សា">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>카테고리 *</label>
-                            <select id="itemCategory" required>
-                                <option value="">선택하세요</option>
-                                <option value="education-furniture">교육용 가구</option>
-                                <option value="education-it">IT 장비</option>
-                                <option value="education-equipment">교육 장비</option>
-                                <option value="practice">실습기자재</option>
-                                <option value="office">사무용품</option>
-                                <option value="cleaning">청소/위생용품</option>
-                                <option value="books">도서/교재</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>위치</label>
-                            <input type="text" id="itemLocation" placeholder="예: 101호">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>현재고</label>
-                            <input type="number" id="itemCurrentStock" value="0" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label>최소재고</label>
-                            <input type="number" id="itemMinStock" value="0" min="0">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>단가(USD)</label>
-                            <input type="number" id="itemPrice" value="0" min="0" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label>구매일자</label>
-                            <input type="date" id="itemPurchaseDate">
-                        </div>
-                    </div>
-
                     <div class="form-group">
-                        <label>사진 URL</label>
-                        <input type="url" id="itemPhoto" placeholder="https://...">
+                        <label>최소재고<span class="khmer">ស្តុកអប្បបរមា</span></label>
+                        <input type="number" id="itemMinQuantity" min="0" placeholder="0">
                     </div>
+                </div>
 
+                <div class="form-row">
                     <div class="form-group">
-                        <label>비고</label>
-                        <textarea id="itemNotes" rows="3" placeholder="추가 정보를 입력하세요"></textarea>
+                        <label>구매가격 (USD)<span class="khmer">តម្លៃទិញ (ដុល្លារ)</span></label>
+                        <input type="number" id="itemPrice" min="0" step="0.01" placeholder="0.00">
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn" style="background: #6c757d; color: white;" onclick="closeModal()">취소</button>
-                <button type="button" class="btn btn-primary" onclick="saveItem()">저장</button>
-            </div>
+                    <div class="form-group">
+                        <label>구매일자<span class="khmer">កាលបរិច្ឆេទទិញ</span></label>
+                        <input type="date" id="itemPurchaseDate">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>비고<span class="khmer">កំណត់សម្គាល់</span></label>
+                    <textarea id="itemNotes" placeholder="추가 정보를 입력하세요"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-small" onclick="closeModal()" style="background: #6b7280; color: white;">
+                        <span>취소</span>
+                        <span class="khmer">បោះបង់</span>
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-small">
+                        <span>저장</span>
+                        <span class="khmer">រក្សាទុក</span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
     <script>
+        // ⭐⭐⭐ 구글 시트 Web App URL (배포 후 여기에 입력하세요) ⭐⭐⭐
+        const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwMT4hS-TTHaCDhH_4uNqRhDrq-yNkFQNn1NrjGWdTSq22YOGA690BuKdf5tx0pdDkLug/exec';
+        
+        // 디버그 모드
+        const DEBUG_MODE = true;
+        
+        function debugLog(message, data = null) {
+            if (DEBUG_MODE) {
+                console.log('[물품관리 DEBUG]', message);
+                if (data) console.log(data);
+            }
+        }
+        
+        // 데이터 저장소
         let inventory = [];
-        let photoData = {};
-        let currentTab = 'management';
-        let editMode = false;
-        let editingCode = '';
 
-        // 페이지 로드 시 데이터 로드
-        window.onload = function() {
-            console.log('🏥 우정캄보디아 간호대학교 - 물품관리 시스템');
-            loadInventory();
+        // ⭐⭐⭐ 재구조화된 카테고리 코드 prefix ⭐⭐⭐
+        const codePrefixes = {
+            'practice': 'PRC',              // 실습기자재
+            'education-it': 'IT',           // 교육 > IT/전자기기
+            'education-furniture': 'FUR',   // 교육 > 가구
+            'education-equipment': 'EDU',   // 교육 > 기타교육기자재
+            'office': 'OFF',                // 사무용품
+            'cleaning': 'CLN',              // 청소/위생용품
+            'books': 'BK',                  // 도서/교재
+            'warehouse': 'WHR',             // 창고
+            'other': 'ETC'                  // 기타
         };
 
-        // 탭 전환
-        function openTab(tabName) {
-            const tabs = document.querySelectorAll('.tab-content');
-            const buttons = document.querySelectorAll('.tab-button');
-            
-            tabs.forEach(tab => tab.classList.remove('active'));
-            buttons.forEach(btn => btn.classList.remove('active'));
-            
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
-            currentTab = tabName;
+        // ⭐⭐⭐ 재구조화된 카테고리별 물품 리스트 ⭐⭐⭐
+        const itemsByCategory = {
+            // 실습기자재 (의료 + 간호 통합)
+            practice: [
+                '혈압계 (자동) | ឧបករណ៍វាស់សម្ពាធឈាម (ស្វ័យប្រវត្តិ)',
+                '혈압계 (수동) | ឧបករណ៍វាស់សម្ពាធឈាម (ដោយដៃ)',
+                '디지털 체온계 | កាល់សីម៉ែត្រឌីជីថល',
+                '청진기 | ស្តេតូស្កុប',
+                '산소포화도 측정기 | ម៉ាស៊ីនវាស់ឆាតតុរាប់អុកស៊ីសែន',
+                '심전도기 | ឧបករណ៍វាស់ចង្វាក់បេះដូង',
+                '네뷸라이저 | ម៉ាស៊ីនបំប៉ងសាយ',
+                '석션기 | ម៉ាស៊ីនបឺតស្រូប',
+                '주사기 세트 | ឈុតសឺរាំង',
+                '수액 세트 | ឈុតបញ្ចូលសេរ៉ូម',
+                '의료용 가위 | កន្ត្រៃវេជ្ជសាស្ត្រ',
+                '핀셋 | ច្រត់ចាប់',
+                '반창고 | ផ្លាស្ទ័រ',
+                '붕대 | អាំងប៉ាង',
+                '알코올 솜 | ភ្នាសជូតអាល់កុល',
+                '소독약 | ថ្នាំសម្លាប់មេរោគ',
+                '일회용 장갑 | ស្រោមដៃប្រើម្តង',
+                'N95 마스크 | របាំងបិទមាត់ N95',
+                '수술용 마스크 | របាំងវះកាត់',
+                '의료용 앞치마 | អាវក្រណាត់វេជ្ជសាស្ត្រ',
+                '실습용 마네킹 (성인) | តុក្កតាអនុវត្ត (មនុស្សពេញវ័យ)',
+                '실습용 마네킹 (소아) | តុក្កតាអនុវត្ត (កុមារ)',
+                '실습용 마네킹 (신생아) | តុក្កតាអនុវត្ត (ទារកទើបកើត)',
+                '정맥주사 연습 팔 | ដៃអនុវត្តចាក់សឺរ៉ូម',
+                '근육주사 연습 모형 | ម៉ូតអនុវត្តចាក់សាច់ដុំ',
+                '도뇨관 삽입 연습 모형 | ម៉ូតអនុវត្តបញ្ចូលបំពង់បត់ទឹកនោម',
+                '기관삽관 연습 모형 | ម៉ូតអនុវត្តបញ្ចូលបំពង់ដង្ហើម',
+                '심폐소생술 마네킹 | តុក្កតាអនុវត្ត CPR',
+                '상처 드레싱 키트 | ឈុតធ្វើបង់របួស',
+                '투약 트레이 | ថាសដាក់ថ្នាំ',
+                '간호 카트 | រទេះគិលានុបដ្ឋាយិកា',
+                '체위 변경 쿠션 | ខ្នើយប្តូរទំរង់',
+                '환자용 침대 시트 | ក្រណាត់ចាក់គ្រែអ្នកជំងឺ',
+                '휠체어 | កៅអីរុញ',
+                '목발 | អណ្តើក',
+                '워커 | ជើងដែក',
+                '이동식 변기 | ទូទឹកចល័ត',
+                '요실금 패드 | បន្ទះស្រូបទឹកនោម',
+                '욕창 예방 매트 | កម្រាលពារដំបៅ',
+                '체온계 보호 커버 | គម្របការពារកាល់សីម៉ែត្រ'
+            ],
+            // 교육 > IT/전자기기
+            'education-it': [
+                '전자칠판 및 이동식스텐드 | ក្តារអេឡិចត្រូនិចនិងជើងចល័ត',
+                '컴퓨터 (PC, 모니터) | កុំព្យូទ័រ (PC និងអេក្រង់)',
+                '음향기기 | ឧបករណ៍សំឡេង',
+                '프린터 | ម៉ាស៊ីនព្រីន',
+                '전화기 | ទូរស័ព្ទ',
+                '복사기 (팩스, 스캔겸용) | ម៉ាស៊ីនថតចម្លង (ទូរសារ ស្កែន)',
+                '종이파쇄기 | ម៉ាស៊ីនកិនក្រដាស',
+                '웹캠 | កាមេរ៉ាវេប'
+            ],
+            // 교육 > 가구
+            'education-furniture': [
+                '2인용 책상 | តុ២នាក់',
+                '3인용 책상 | តុ៣នាក់',
+                '책상 (수업보조용) | តុ (សម្រាប់ជំនួយការសិក្សា)',
+                '2인용 사무용 책상 | តុការិយាល័យ២នាក់',
+                '4인용 사무용 책상 | តុការិយាល័យ៤នាក់',
+                '1인용 사무용 책상 | តុការិយាល័យ១នាក់',
+                '의자 | កៅអី',
+                '강사의자 | កៅអីគ្រូបង្រៀន',
+                '사무용의자 | កៅអីការិយាល័យ',
+                '상담용의자 | កៅអីប្រឹក្សា',
+                '회의용 탁자 (7인용) | តុប្រជុំ (៧នាក់)',
+                '상담용 테이블 (4인용) | តុប្រឹក្សា (៤នាក់)',
+                '테이블 | តុ',
+                '책장 | ធ្នើរសៀវភៅ',
+                '물품보관장 (사무실) | ទូរទុកសម្ភារៈ (ការិយាល័យ)',
+                '사물함 | ទូដាក់របស់',
+                '옷장 | ទូខោអាវ',
+                '파티션 | ផ្ទាំងបំបែក',
+                '의자 (쇼파) | កៅអី (សាឡុង)'
+            ],
+            // 교육 > 기타교육기자재
+            'education-equipment': [
+                '화이트보드 | ក្តារស',
+                'AED (심장충격기) 및 보관함 | AED (ឧបករណ៍ជំនួយបេះដូង) និងទូទុក',
+                '시계 | នាឡិកា',
+                '씽크대 | អាងលាងចាន',
+                '냉장고 | ទូរទឹកកក',
+                '정수기 | ម៉ាស៊ីនទឹកស្អាត',
+                '휴지통 | ធុងសំរាម'
+            ],
+            // 사무용품
+            office: [
+                '복사용지 (A4) | ក្រដាសថតចម្លង (A4)',
+                '복사용지 (A3) | ក្រដាសថតចម្លង (A3)',
+                '볼펜 (흑색) | ប៊ិចខ្មៅ',
+                '볼펜 (청색) | ប៊ិចខៀវ',
+                '볼펜 (적색) | ប៊ិចក្រហម',
+                '형광펜 세트 | ឈុតប៊ិចរំលេច',
+                '연필 | ខ្មៅដៃ',
+                '지우개 | កៅស៊ូ',
+                '샤프펜슬 | ខ្មៅដៃមេកានិច',
+                '가위 | កន្ត្រៃ',
+                '스테이플러 | ម៉ាស៊ីនដេរ',
+                '스테이플 침 | ម្ជុលដេរ',
+                '클립 (대) | ឃ្លីបធំ',
+                '클립 (소) | ឃ្លីបតូច',
+                '풀 | កាវ',
+                '테이프 | ខ្សែរភ្ជាប់',
+                '포스트잇 | ក្រដាសភ្ជាប់',
+                '파일 박스 | ប្រអប់ដាក់ឯកសារ',
+                '클리어 파일 | ឯកសារប្លាស្ទិច',
+                '바인더 | ប្រអប់ចងឯកសារ',
+                '계산기 | ម៉ាស៊ីនគិតលេខ',
+                '화이트보드 마커 | ប៊ិចក្តារស',
+                '지우개 (화이트보드용) | ស្រោមជូតក្តារស',
+                '명함지 | ក្រដាសបោះពុម្ពនាមប័ណ្ណ',
+                '전화기 | ទូរស័ព្ទ'
+            ],
+            // 청소/위생용품
+            cleaning: [
+                '비누 | សាប៊ូ',
+                '손세정제 | ទឹកលាងដៃ',
+                '알코올 (소독용) | អាល់កុល (សម្លាប់មេរោគ)',
+                '락스 (표백제) | ទឹកប្រឡាក់សុទ្ធ',
+                '세제 (주방용) | ទឹកលាងចាន',
+                '세제 (세탁용) | ទឹកលាងខោអាវ',
+                '유리 세정제 | ទឹកលាងកញ្ចក់',
+                '바닥 세정제 | ទឹកលាងផ្ទាំង',
+                '화장실 세정제 | ទឹកលាងបង្គន់',
+                '걸레 | ក្រណាត់ជូត',
+                '대걸레 | កន្ទ្រាងជូតផ្ទាំង',
+                '빗자루 | អណ្តូង',
+                '쓰레받기 | ហែតសំរាម',
+                '먼지털이 | អណ្តូងសំរាមធូលី',
+                '쓰레기봉투 (대) | ថង់សំរាមធំ',
+                '쓰레기봉투 (소) | ថង់សំរាមតូច',
+                '고무장갑 | ស្រោមដៃកៅស៊ូ',
+                '수세미 | ស្រោមកកទន់',
+                '휴지 (두루마리) | ក្រដាសធូមូម៉ា',
+                '휴지 (갑) | ក្រដាសធូមក្រអូប',
+                '물티슈 | ក្រដាសជូតសើម',
+                '버킷 | ធុងទឹក',
+                '청소용 브러시 | ជក់សម្អាត',
+                '유리닦이 | ស្រោមជូតកញ្ចក់',
+                '진공청소기 | ម៉ាស៊ីនបូមធូលី'
+            ],
+            // 도서/교재
+            books: [
+                '간호학 개론 | សៀវភៅគិលានុបដ្ឋាយិកាមូលដ្ឋាន',
+                '해부생리학 | សៀវភៅកាយវិភាគសរីរវិទ្យា',
+                '약리학 | សៀវភៅឱសថវិទ្យា',
+                '병리학 | សៀវភៅរោគវិទ្យា',
+                '미생물학 | សៀវភៅមីក្រូជីវសាស្ត្រ',
+                '영양학 | សៀវភៅអាហាររូបត្ថម្ភ',
+                '성인간호학 | សៀវភៅគិលានុបដ្ឋាយិកាមនុស្សពេញវ័យ',
+                '아동간호학 | សៀវភៅគិលានុបដ្ឋាយិកាកុមារ',
+                '모성간호학 | សៀវភៅគិលានុបដ្ឋាយិកាម្តាយ',
+                '정신간호학 | សៀវភៅគិលានុបដ្ឋាយិកាផ្លូវចិត្ត',
+                '지역사회간호학 | សៀវភៅគិលានុបដ្ឋាយិកាសហគមន៍',
+                '간호관리학 | សៀវភៅគ្រប់គ្រងគិលានុបដ្ឋាយិកា',
+                '간호연구 | សៀវភៅស្រាវជ្រាវគិលានុបដ្ឋាយិកា',
+                '의학용어 | សៀវភៅពាក្យវេជ្ជសាស្ត្រ',
+                '한국어 교재 (초급) | សៀវភៅភាសាកូរ៉េ (កម្រិតចាប់ផ្តើម)',
+                '한국어 교재 (중급) | សៀវភៅភាសាកូរ៉េ (កម្រិតមធ្យម)',
+                '한국어 교재 (고급) | សៀវភៅភាសាកូរ៉េ (កម្រិតខ្ពស់)',
+                '영어 회화 | សៀវភៅសន្ទនាអង់គ្លេស',
+                '의학 영어 | សៀវភៅអង់គ្លេសវេជ្ជសាស្ត្រ',
+                '간호 실습 지침서 | សៀវភៅណែនាំអនុវត្តគិលានុបដ្ឋាយិកា',
+                '참고 도서 | សៀវភៅយោង',
+                '저널 (학술지) | ទស្សនាវដ្តីបណ្ឌិត្យសភា',
+                '워크북 | សៀវភៅលំហាត់',
+                '노트 | សៀវភៅកត់ត្រា',
+                '의료 법규집 | សៀវភៅច្បាប់វេជ្ជសាស្ត្រ'
+            ],
+            // 창고
+            warehouse: [
+                '팔레트 | ផ្ទះឈើ',
+                '핸드 트럭 | រទេះដឹកដោយដៃ',
+                '운반용 카트 | រទេះដឹក',
+                '창고 선반 (대) | ធ្នើរឃ្លាំង (ធំ)',
+                '창고 선반 (중) | ធ្នើរឃ្លាំង (មធ្យម)',
+                '창고 선반 (소) | ធ្នើរឃ្លាំង (តូច)',
+                '보관 상자 (대) | ប្រអប់ទុក (ធំ)',
+                '보관 상자 (중) | ប្រអប់ទុក (មធ្យម)',
+                '보관 상자 (소) | ប្រអប់ទុក (តូច)',
+                '플라스틱 박스 | ប្រអប់ប្លាស្ទិក',
+                '포장 박스 | ប្រអប់ខ្ចប់',
+                '비닐 포장재 | សម្ភារៈខ្ចប់ប្លាស្ទិក',
+                '에어캡 | ប្លោកខ្យល់',
+                '테이프 | ខ្សែរភ្ជាប់',
+                '라벨 스티커 | ស្ទីកឃ័រ',
+                '바코드 스캐너 | ម៉ាស៊ីនស្កែនបាកូដ',
+                '저울 | ជញ្ជីង',
+                '작업용 장갑 | ស្រោមដៃធ្វើការ',
+                '안전모 | មួកសុវត្ថិភាព',
+                '안전화 | ស្បែកជើងសុវត្ថិភាព',
+                '안전 조끼 | អាវកាក់សុវត្ថិភាព',
+                '손수레 | រទេះរុញដោយដៃ',
+                '사다리 | ជណ្តើរ',
+                '발판 | កន្លែងឈរ',
+                '랩핑 필름 | ភីលីមខ្ចប់'
+            ],
+            // 기타
+            other: [
+                '시계 | នាឡិកា',
+                '달력 | ប្រតិទិន',
+                '게시판 | ក្តារបិទសេចក្តីជូនដំណឹង',
+                '명찰 | ផ្លាកឈ្មោះ',
+                '랜야드 | ខ្សែព្យួរផ្លាកឈ្មោះ',
+                '배터리 (AA) | ថ្ម (AA)',
+                '배터리 (AAA) | ថ្ម (AAA)',
+                '손전등 | ភ្លើងពិល',
+                '우산 | ឆ័ត្រ',
+                '우비 | អាវជំនួស',
+                '구급상자 | ប្រអប់បន្ទាន់',
+                '소화기 | ឧបករណ៍ពន្លត់អគ្គិភ័យ',
+                '열쇠 | ស្នោ',
+                '자물쇠 | សោរចាក់',
+                '현수막 | ផ្ទាំងបដា',
+                '포스터 | ផ្ទាំងរូបភាព',
+                '명함 | នាមប័ណ្ណ',
+                '봉투 (서류용) | ស្រោមលិខិត',
+                '상자 (포장용) | ប្រអប់ខ្ចប់របស់',
+                '테이프 (포장용) | ខ្សែរភ្ជាប់ប្រអប់',
+                '스티커 라벨 | ស្ទីកឃ័រ',
+                '인장 | ត្រា',
+                '인주 | ទឹកថ្នាំត្រា',
+                '지갑 | កាបូប',
+                '카드 홀더 | កន្លែងដាក់កាត'
+            ]
+        };
+
+        // 로딩 표시
+        function showLoading() {
+            document.getElementById('loadingOverlay').classList.add('active');
         }
 
-        // 알림 표시
-        function showAlert(message, type = 'info', tabId = 'managementAlert') {
-            const alert = document.getElementById(tabId);
-            alert.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
-            setTimeout(() => alert.innerHTML = '', 5000);
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('active');
         }
 
-        // 물품 데이터 로드
-        function loadInventory() {
-            showAlert('데이터를 불러오는 중...', 'info');
+        // ⭐⭐⭐ 수정: 카테고리 선택 시 코드와 물품명 리스트 업데이트 (수정 모드 구분) ⭐⭐⭐
+        function updateCodeAndItems() {
+            const category = document.getElementById('itemCategory').value;
+            const codeInput = document.getElementById('itemCode');
+            const codeDisplay = document.getElementById('suggestedCodeDisplay');
+            const itemSelect = document.getElementById('itemNameSelect');
+            const isEditMode = document.getElementById('itemId').value !== ''; // ⭐ 수정 모드 확인
             
-            google.script.run
-                .withSuccessHandler(function(result) {
-                    console.log('서버 응답:', result);
-                    if (result.success && result.data) {
-                        inventory = result.data;
-                        renderTable(inventory);
-                        showAlert(`✅ ${inventory.length}개 물품 로드 완료!`, 'success');
-                    } else {
-                        showAlert('❌ 데이터 로드 실패: ' + (result.error || '알 수 없는 오류'), 'error');
+            if (!category) {
+                if (!isEditMode) { // ⭐ 새 등록 모드에서만 코드 초기화
+                    codeInput.value = '';
+                    codeInput.placeholder = '카테고리를 먼저 선택하세요';
+                    codeDisplay.innerHTML = '';
+                }
+                itemSelect.innerHTML = '<option value="">카테고리를 먼저 선택하세요 | សូមជ្រើសប្រភេទសិន</option>';
+                itemSelect.disabled = true;
+                return;
+            }
+            
+            // ⭐ 새 등록 모드에서만 자동 코드 생성
+            if (!isEditMode) {
+                const prefix = codePrefixes[category];
+                const existingCodes = inventory
+                    .filter(item => item.category === category)
+                    .map(item => item.code)
+                    .filter(code => code.startsWith(prefix + '-'))
+                    .sort();
+                
+                let nextNumber = 1;
+                if (existingCodes.length > 0) {
+                    const lastCode = existingCodes[existingCodes.length - 1];
+                    const lastNumber = parseInt(lastCode.split('-')[1]);
+                    if (!isNaN(lastNumber)) {
+                        nextNumber = lastNumber + 1;
                     }
-                })
-                .withFailureHandler(function(error) {
-                    console.error('로드 오류:', error);
-                    showAlert('❌ 서버 오류: ' + error.message, 'error');
-                })
-                .getData();
-        }
-
-        // 테이블 렌더링
-        function renderTable(data) {
-            const tbody = document.getElementById('inventoryBody');
-            
-            if (data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">물품이 없습니다</td></tr>';
-                return;
-            }
-            
-            tbody.innerHTML = data.map(item => `
-                <tr>
-                    <td><strong>${item['물품코드'] || '-'}</strong></td>
-                    <td>${item['물품명(한글)'] || '-'}</td>
-                    <td style="font-family: 'Noto Sans Khmer'">${item['물품명(Khmer)'] || '-'}</td>
-                    <td>${getCategoryName(item['카테고리'])}</td>
-                    <td>${item['현재고'] || 0}</td>
-                    <td>${item['위치'] || '-'}</td>
-                    <td>$${Number(item['단가(USD)'] || 0).toLocaleString()}</td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn btn-primary btn-sm" onclick='editItem(${JSON.stringify(item).replace(/'/g, "&#39;")})'>수정</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteItem('${item['물품코드']}')">삭제</button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        // 검색 필터
-        function filterTable() {
-            const searchText = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = inventory.filter(item => {
-                const code = (item['물품코드'] || '').toLowerCase();
-                const nameKo = (item['물품명(한글)'] || '').toLowerCase();
-                const nameKh = (item['물품명(Khmer)'] || '').toLowerCase();
-                return code.includes(searchText) || nameKo.includes(searchText) || nameKh.includes(searchText);
-            });
-            renderTable(filtered);
-        }
-
-        // 물품 등록 모달 열기
-        function showAddModal() {
-            editMode = false;
-            document.getElementById('modalTitle').textContent = '물품 등록';
-            document.getElementById('itemForm').reset();
-            document.getElementById('itemCode').readOnly = false;
-            document.getElementById('itemModal').style.display = 'block';
-        }
-
-        // 물품 수정 모달 열기
-        function editItem(item) {
-            editMode = true;
-            editingCode = item['물품코드'];
-            document.getElementById('modalTitle').textContent = '물품 수정';
-            
-            document.getElementById('itemCode').value = item['물품코드'];
-            document.getElementById('itemCode').readOnly = true;
-            document.getElementById('itemNameKo').value = item['물품명(한글)'] || '';
-            document.getElementById('itemNameKh').value = item['물품명(Khmer)'] || '';
-            document.getElementById('itemCategory').value = item['카테고리'] || '';
-            document.getElementById('itemLocation').value = item['위치'] || '';
-            document.getElementById('itemCurrentStock').value = item['현재고'] || 0;
-            document.getElementById('itemMinStock').value = item['최소재고'] || 0;
-            document.getElementById('itemPrice').value = item['단가(USD)'] || 0;
-            document.getElementById('itemPurchaseDate').value = item['구매일자'] || '';
-            document.getElementById('itemPhoto').value = item['사진'] || '';
-            document.getElementById('itemNotes').value = item['비고'] || '';
-            
-            document.getElementById('itemModal').style.display = 'block';
-        }
-
-        // 모달 닫기
-        function closeModal() {
-            document.getElementById('itemModal').style.display = 'none';
-        }
-
-        // 물품 저장
-        function saveItem() {
-            const item = {
-                '물품코드': document.getElementById('itemCode').value.trim().toUpperCase(),
-                '물품명(한글)': document.getElementById('itemNameKo').value.trim(),
-                '물품명(Khmer)': document.getElementById('itemNameKh').value.trim(),
-                '카테고리': document.getElementById('itemCategory').value,
-                '위치': document.getElementById('itemLocation').value.trim(),
-                '현재고': document.getElementById('itemCurrentStock').value,
-                '최소재고': document.getElementById('itemMinStock').value,
-                '단가(USD)': document.getElementById('itemPrice').value,
-                '구매일자': document.getElementById('itemPurchaseDate').value,
-                '사진': document.getElementById('itemPhoto').value.trim(),
-                '비고': document.getElementById('itemNotes').value.trim()
-            };
-
-            if (!item['물품코드'] || !item['물품명(한글)'] || !item['물품명(Khmer)'] || !item['카테고리']) {
-                alert('필수 항목을 모두 입력하세요!');
-                return;
-            }
-
-            showAlert('저장 중...', 'info');
-
-            if (editMode) {
-                // 수정
-                google.script.run
-                    .withSuccessHandler(function(result) {
-                        if (result.success) {
-                            showAlert('✅ ' + result.message, 'success');
-                            closeModal();
-                            loadInventory();
-                        } else {
-                            showAlert('❌ ' + result.error, 'error');
-                        }
-                    })
-                    .withFailureHandler(function(error) {
-                        showAlert('❌ 오류: ' + error.message, 'error');
-                    })
-                    .updateItemFromClient(item);
+                }
+                
+                const suggestedCode = `${prefix}-${String(nextNumber).padStart(3, '0')}`;
+                codeInput.value = suggestedCode;
+                codeInput.placeholder = `예: ${suggestedCode}`;
+                codeDisplay.innerHTML = `<span class="suggested-code">💡 추천: ${suggestedCode}</span>`;
             } else {
-                // 등록
-                google.script.run
-                    .withSuccessHandler(function(result) {
-                        if (result.success) {
-                            showAlert('✅ ' + result.message, 'success');
-                            closeModal();
-                            loadInventory();
-                        } else {
-                            showAlert('❌ ' + result.error, 'error');
-                        }
-                    })
-                    .withFailureHandler(function(error) {
-                        showAlert('❌ 오류: ' + error.message, 'error');
-                    })
-                    .addItemFromClient(item);
+                // ⭐ 수정 모드에서는 기존 코드 유지하고 안내 메시지만 표시
+                codeDisplay.innerHTML = `<span class="suggested-code" style="background: #fef3c7; color: #92400e;">🔒 수정 모드에서는 코드를 변경할 수 없습니다</span>`;
+            }
+            
+            // 물품명 리스트 업데이트
+            itemSelect.innerHTML = '<option value="">리스트에서 선택하거나 직접 입력 | ជ្រើសពីបញ្ជី ឬបញ្ចូលដោយដៃ</option>';
+            
+            if (itemsByCategory[category]) {
+                itemsByCategory[category].forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item;
+                    option.textContent = item;
+                    itemSelect.appendChild(option);
+                });
+                itemSelect.disabled = false;
             }
         }
 
-        // 물품 삭제
-        function deleteItem(code) {
-            if (!confirm(`정말로 물품 "${code}"을(를) 삭제하시겠습니까?`)) {
+        // 물품 리스트에서 선택 시 입력 필드에 자동 입력
+        function selectItemFromList() {
+            const selectedValue = document.getElementById('itemNameSelect').value;
+            
+            if (selectedValue) {
+                const parts = selectedValue.split(' | ');
+                document.getElementById('itemNameKo').value = parts[0] || '';
+                document.getElementById('itemNameKh').value = parts[1] || '';
+            }
+        }
+        
+        // ⭐⭐⭐ CORS 문제 완전 해결 - 구글 시트에서 데이터 로드 ⭐⭐⭐
+        async function loadFromGoogleSheets() {
+            debugLog('loadFromGoogleSheets 시작');
+            
+            if (!GOOGLE_SHEETS_WEB_APP_URL || GOOGLE_SHEETS_WEB_APP_URL === 'YOUR_WEB_APP_URL_HERE') {
+                alert('⚠️ 구글 시트 Web App URL을 설정해주세요!');
                 return;
             }
-
-            showAlert('삭제 중...', 'info');
-
-            google.script.run
-                .withSuccessHandler(function(result) {
-                    if (result.success) {
-                        showAlert('✅ ' + result.message, 'success');
-                        loadInventory();
-                    } else {
-                        showAlert('❌ ' + result.error, 'error');
+            
+            showLoading();
+            
+            try {
+                debugLog('Fetch GET 요청 시작');
+                
+                const response = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+                    method: 'GET',
+                    redirect: 'follow'
+                });
+                
+                debugLog('응답 상태:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                debugLog('파싱된 결과:', result);
+                
+                if (result.success) {
+                    inventory = result.data.map(item => ({
+                        id: parseInt(item['ID (숨김)']) || Date.now() + Math.random(),
+                        code: item['물품코드'] || '',
+                        name: (item['물품명(한글)'] && item['물품명(Khmer)']) 
+                            ? `${item['물품명(한글)']} | ${item['물품명(Khmer)']}` 
+                            : item['물품명(한글)'] || '',
+                        nameKo: item['물품명(한글)'] || '',
+                        nameKh: item['물품명(Khmer)'] || '',
+                        category: item['카테고리'] || '',
+                        quantity: parseInt(item['현재고']) || 0,
+                        minQuantity: parseInt(item['최소재고']) || 0,
+                        location: item['위치'] || '',
+                        price: parseFloat(item['단가(USD)']) || 0,
+                        purchaseDate: item['구매일자'] || '',
+                        createdDate: item['등록일'] || new Date().toISOString(),
+                        notes: item['비고'] || ''
+                    })).filter(item => item.code);
+                    
+                    debugLog('변환된 inventory:', inventory);
+                    
+                    saveToStorage();
+                    updateStats();
+                    renderTable();
+                    hideLoading();
+                    
+                    console.log(`✅ 성공! ${inventory.length}개의 물품을 불러왔습니다.`);
+                    
+                } else {
+                    hideLoading();
+                    const errorMsg = result.error || '알 수 없는 오류';
+                    console.error('서버 오류:', result);
+                    alert(`❌ 데이터 로드 실패\n\n오류: ${errorMsg}`);
+                }
+            } catch (error) {
+                console.error('구글 시트 연결 오류:', error);
+                hideLoading();
+                alert(`❌ 구글 시트 연결 실패\n\n오류: ${error.message}\n\n로컬 데이터를 사용합니다.`);
+                
+                const localData = localStorage.getItem('wcnu_inventory');
+                if (localData) {
+                    try {
+                        inventory = JSON.parse(localData);
+                        updateStats();
+                        renderTable();
+                    } catch (e) {
+                        console.error('로컬 데이터 파싱 오류:', e);
                     }
-                })
-                .withFailureHandler(function(error) {
-                    showAlert('❌ 오류: ' + error.message, 'error');
-                })
-                .deleteItemFromClient(code);
+                }
+            }
         }
-
-        // 이력카드와 동기화
-        function syncToCard() {
-            if (inventory.length === 0) {
-                showAlert('먼저 물품 데이터를 로드하세요!', 'error');
-                return;
+        
+        // ⭐⭐⭐ CORS 문제 완전 해결 - 구글 시트에 데이터 저장 ⭐⭐⭐
+        async function saveToGoogleSheets(action, data) {
+            debugLog(`saveToGoogleSheets - action: ${action}`, data);
+            
+            if (!GOOGLE_SHEETS_WEB_APP_URL || GOOGLE_SHEETS_WEB_APP_URL === 'YOUR_WEB_APP_URL_HERE') {
+                console.warn('구글 시트 URL이 설정되지 않아 로컬에만 저장됩니다');
+                return false;
             }
             
-            const buttons = document.querySelectorAll('.tab-button');
-            buttons[1].click();
+            showLoading();
             
-            showAlert('✅ 물품 데이터가 동기화되었습니다!', 'success', 'printAlert');
+            try {
+                const payload = {
+                    action: action,
+                    data: action === 'delete' ? undefined : {
+                        id: data.id,
+                        code: data.code,
+                        nameKo: data.nameKo || data.name.split(' | ')[0],
+                        nameKh: data.nameKh || data.name.split(' | ')[1] || '',
+                        category: data.category,
+                        quantity: data.quantity,
+                        minQuantity: data.minQuantity || 0,
+                        location: data.location,
+                        price: data.price || 0,
+                        purchaseDate: data.purchaseDate || '',
+                        createdDate: data.createdDate || new Date().toISOString(),
+                        notes: data.notes || ''
+                    },
+                    id: action === 'delete' ? data.id : undefined
+                };
+                
+                debugLog('POST payload:', payload);
+                console.log('📤 구글 시트로 데이터 전송 중...');
+                
+                const response = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                    redirect: 'follow'
+                });
+                
+                console.log('✅ 구글 시트로 요청 전송 완료!');
+                
+                setTimeout(() => {
+                    console.log('🔄 최신 데이터 다시 로드 중...');
+                    loadFromGoogleSheets();
+                }, 1500);
+                
+                return true;
+                
+            } catch (error) {
+                console.error('❌ 구글 시트 저장 오류:', error);
+                hideLoading();
+                alert('오류 발생: ' + error.message + '\n\n로컬에만 저장되었습니다.');
+                return false;
+            }
+        }
+        
+        function saveToStorage() {
+            localStorage.setItem('wcnu_inventory', JSON.stringify(inventory));
+            debugLog('로컬 스토리지 저장 완료');
         }
 
-        // === 이력카드 기능 ===
+        function init() {
+            debugLog('초기화 시작');
+            
+            const localData = localStorage.getItem('wcnu_inventory');
+            if (localData) {
+                try {
+                    inventory = JSON.parse(localData);
+                    debugLog('로컬 데이터 로드:', inventory.length + '개');
+                    updateStats();
+                    renderTable();
+                } catch (e) {
+                    console.error('로컬 데이터 파싱 오류:', e);
+                }
+            }
+            
+            if (GOOGLE_SHEETS_WEB_APP_URL && GOOGLE_SHEETS_WEB_APP_URL !== 'YOUR_WEB_APP_URL_HERE') {
+                debugLog('자동 로드 시작');
+                setTimeout(loadFromGoogleSheets, 1000);
+            } else {
+                console.warn('구글 시트 URL이 설정되지 않았습니다.');
+            }
+        }
+
+        function updateStats() {
+            const totalItems = inventory.length;
+            const totalQuantity = inventory.reduce((sum, item) => sum + item.quantity, 0);
+            const lowStockCount = inventory.filter(item => item.minQuantity > 0 && item.quantity <= item.minQuantity).length;
+            const categoryCount = new Set(inventory.map(item => item.category)).size;
+
+            document.getElementById('totalItems').textContent = totalItems;
+            document.getElementById('totalQuantity').textContent = totalQuantity;
+            document.getElementById('lowStockCount').textContent = lowStockCount;
+            document.getElementById('categoryCount').textContent = categoryCount;
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('inventoryBody');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            let filtered = inventory.filter(item => {
+                const matchesSearch = (item.nameKo || '').toLowerCase().includes(searchTerm) ||
+                                    item.code.toLowerCase().includes(searchTerm) ||
+                                    item.location.toLowerCase().includes(searchTerm);
+                const matchesCategory = !categoryFilter || item.category === categoryFilter;
+                
+                let matchesStatus = true;
+                if (statusFilter) {
+                    const status = getStatus(item);
+                    matchesStatus = status === statusFilter;
+                }
+
+                return matchesSearch && matchesCategory && matchesStatus;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9">
+                            <div class="empty-state">
+                                <h3>등록된 물품이 없습니다</h3>
+                                <div class="khmer">មិនមានសម្ភារៈដែលបានចុះបញ្ជីទេ</div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(item => {
+                const status = getStatus(item);
+                const statusClass = status === 'good' ? 'status-good' : 
+                                  status === 'low' ? 'status-low' : 'status-critical';
+                const statusText = status === 'good' ? '정상<br><small>ធម្មតា</small>' : 
+                                 status === 'low' ? '부족<br><small>ខ្វះ</small>' : '긴급<br><small>បន្ទាន់</small>';
+                
+                const koreanName = item.nameKo || item.name.split(' | ')[0];
+                const khmerName = item.nameKh || item.name.split(' | ')[1] || '';
+                
+                return `
+                    <tr>
+                        <td><strong>${item.code}</strong></td>
+                        <td>
+                            ${koreanName}
+                            ${khmerName ? '<br><small style="color: #9ca3af;">' + khmerName + '</small>' : ''}
+                        </td>
+                        <td><span class="badge badge-${item.category}">${getCategoryName(item.category)}</span></td>
+                        <td><strong>${item.quantity}</strong></td>
+                        <td>${item.minQuantity}</td>
+                        <td class="${statusClass}">${statusText}</td>
+                        <td>${item.location}</td>
+                        <td>${formatDate(item.createdDate)}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary btn-small" onclick="editItem(${item.id})">
+                                    <span>수정</span>
+                                </button>
+                                <button class="btn btn-danger btn-small" onclick="deleteItem(${item.id})">
+                                    <span>삭제</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function getStatus(item) {
+            if (item.minQuantity === 0) return 'good';  // 최소재고가 0이면 정상
+            if (item.quantity === 0) return 'critical';
+            if (item.quantity <= item.minQuantity) return 'low';
+            return 'good';
+        }
 
         function getCategoryName(category) {
             const names = {
-                'education-furniture': '교육용 가구',
-                'education-it': 'IT 장비',
-                'education-equipment': '교육 장비',
-                'practice': '실습기자재',
-                'office': '사무용품',
-                'cleaning': '청소/위생용품',
-                'books': '도서/교재'
+                'practice': '실습기자재<br><small>សម្ភារៈអនុវត្ត</small>',
+                'education-it': 'IT/전자기기<br><small>IT/អេឡិចត្រូនិច</small>',
+                'education-furniture': '가구<br><small>គ្រឿងសង្ហារឹម</small>',
+                'education-equipment': '기타교육기자재<br><small>ឧបករណ៍អប់រំផ្សេងៗ</small>',
+                'office': '사무용품<br><small>សម្ភារៈការិយាល័យ</small>',
+                'cleaning': '청소/위생용품<br><small>សម្ភារៈអនាម័យ</small>',
+                'books': '도서/교재<br><small>សៀវភៅ/សម្ភារៈសិក្សា</small>',
+                'warehouse': '창고<br><small>ឃ្លាំង</small>',
+                'other': '기타<br><small>ផ្សេងៗ</small>'
             };
             return names[category] || category;
         }
 
-        function changePrintMode() {
-            const mode = document.getElementById('printMode').value;
-            document.getElementById('singleCodeGroup').style.display = mode === 'single' ? 'block' : 'none';
-            document.getElementById('rangeCodeGroup').style.display = mode === 'range' ? 'block' : 'none';
-            document.getElementById('categoryGroup').style.display = mode === 'category' ? 'block' : 'none';
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ko-KR');
+        }
 
-            if (mode === 'all') {
-                loadAllCards();
+        function filterTable() {
+            renderTable();
+        }
+
+        // ⭐⭐⭐ 수정: 새 등록 모달 열기 (읽기 전용 해제) ⭐⭐⭐
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = '물품 등록';
+            document.getElementById('modalTitleKhmer').textContent = 'បញ្ចូលសម្ភារៈ';
+            document.getElementById('itemForm').reset();
+            document.getElementById('itemId').value = '';
+            document.getElementById('suggestedCodeDisplay').innerHTML = '';
+            
+            // ⭐ 새 등록 모드에서는 코드 입력 가능하도록 설정
+            document.getElementById('itemCode').readOnly = false;
+            document.getElementById('itemCode').style.backgroundColor = '';
+            document.getElementById('itemCode').style.cursor = '';
+            
+            document.getElementById('itemNameSelect').innerHTML = '<option value="">카테고리를 먼저 선택하세요 | សូមជ្រើសប្រភេទសិន</option>';
+            document.getElementById('itemNameSelect').disabled = true;
+            document.getElementById('itemModal').classList.add('active');
+        }
+
+        // ⭐⭐⭐ 수정: 수정 모달 열기 (물품코드 읽기 전용 설정) ⭐⭐⭐
+        function editItem(id) {
+            const item = inventory.find(i => i.id === id);
+            if (!item) return;
+
+            document.getElementById('modalTitle').textContent = '물품 수정';
+            document.getElementById('modalTitleKhmer').textContent = 'កែសម្រួលសម្ភារៈ';
+            document.getElementById('itemId').value = item.id;
+            document.getElementById('itemCode').value = item.code;
+            
+            // ⭐ 수정 모드에서는 코드를 읽기 전용으로 설정
+            document.getElementById('itemCode').readOnly = true;
+            document.getElementById('itemCode').style.backgroundColor = '#f3f4f6';
+            document.getElementById('itemCode').style.cursor = 'not-allowed';
+            
+            document.getElementById('itemCategory').value = item.category;
+            document.getElementById('itemNameKo').value = item.nameKo || item.name.split(' | ')[0];
+            document.getElementById('itemNameKh').value = item.nameKh || item.name.split(' | ')[1] || '';
+            document.getElementById('itemLocation').value = item.location;
+            document.getElementById('itemQuantity').value = item.quantity;
+            document.getElementById('itemMinQuantity').value = item.minQuantity;
+            document.getElementById('itemPrice').value = item.price || '';
+            document.getElementById('itemPurchaseDate').value = item.purchaseDate || '';
+            document.getElementById('itemNotes').value = item.notes || '';
+
+            updateCodeAndItems();
+            
+            document.getElementById('itemModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('itemModal').classList.remove('active');
+        }
+
+        function saveItem(event) {
+            event.preventDefault();
+
+            const id = document.getElementById('itemId').value;
+            const nameKo = document.getElementById('itemNameKo').value.trim();
+            const nameKh = document.getElementById('itemNameKh').value.trim();
+            
+            const itemData = {
+                code: document.getElementById('itemCode').value,
+                nameKo: nameKo,
+                nameKh: nameKh,
+                name: nameKh ? `${nameKo} | ${nameKh}` : nameKo,
+                category: document.getElementById('itemCategory').value,
+                location: document.getElementById('itemLocation').value,
+                quantity: parseInt(document.getElementById('itemQuantity').value),
+                minQuantity: parseInt(document.getElementById('itemMinQuantity').value) || 0,
+                price: parseFloat(document.getElementById('itemPrice').value) || 0,
+                purchaseDate: document.getElementById('itemPurchaseDate').value,
+                notes: document.getElementById('itemNotes').value
+            };
+
+            if (id) {
+                const index = inventory.findIndex(i => i.id === parseInt(id));
+                inventory[index] = { ...inventory[index], ...itemData };
             } else {
-                document.getElementById('previewSection').innerHTML = '<div class="loading">물품 코드를 입력하세요</div>';
+                itemData.id = Date.now();
+                itemData.createdDate = new Date().toISOString();
+                inventory.push(itemData);
             }
+
+            const action = id ? 'update' : 'add';
+            const savedItem = id ? inventory.find(i => i.id === parseInt(id)) : inventory[inventory.length - 1];
+            
+            saveToStorage();
+            updateStats();
+            renderTable();
+            closeModal();
+
+            saveToGoogleSheets(action, savedItem);
+
+            console.log('✅ 물품이 성공적으로 저장되었습니다!');
         }
 
-        function loadSingleCard() {
-            const code = document.getElementById('singleCode').value.trim().toUpperCase();
-            if (!code) {
-                alert('물품 코드를 입력하세요!');
-                return;
+        function deleteItem(id) {
+            if (!confirm('정말 이 물품을 삭제하시겠습니까?\nតើអ្នកពិតជាចង់លុបសម្ភារៈនេះមែនទេ?')) return;
+
+            const item = inventory.find(i => i.id === id);
+            
+            inventory = inventory.filter(i => i.id !== id);
+            saveToStorage();
+            updateStats();
+            renderTable();
+
+            if (item) {
+                saveToGoogleSheets('delete', { id: id });
             }
 
-            const item = inventory.find(i => i['물품코드'] === code);
-            if (!item) {
-                alert(`해당 코드(${code})의 물품을 찾을 수 없습니다!`);
-                return;
-            }
-
-            renderCards([item]);
+            console.log('✅ 물품이 삭제되었습니다.');
         }
 
-        function loadRangeCards() {
-            const startCode = document.getElementById('startCode').value.trim().toUpperCase();
-            const endCode = document.getElementById('endCode').value.trim().toUpperCase();
-
-            if (!startCode || !endCode) {
-                alert('시작 코드와 종료 코드를 모두 입력하세요!');
-                return;
-            }
-
-            const rangeItems = inventory.filter(item => {
-                return item['물품코드'] >= startCode && item['물품코드'] <= endCode;
-            }).sort((a, b) => a['물품코드'].localeCompare(b['물품코드']));
-
-            if (rangeItems.length === 0) {
-                alert('해당 범위에 물품이 없습니다!');
-                return;
-            }
-
-            renderCards(rangeItems);
-        }
-
-        function loadCategoryCards() {
-            const category = document.getElementById('categorySelect').value;
-            const categoryItems = inventory.filter(item => item['카테고리'] === category)
-                .sort((a, b) => a['물품코드'].localeCompare(b['물품코드']));
-
-            renderCards(categoryItems);
-        }
-
-        function loadAllCards() {
-            if (inventory.length === 0) {
-                showAlert('먼저 물품 데이터를 로드하세요!', 'error', 'printAlert');
-                return;
-            }
-            const sortedItems = [...inventory].sort((a, b) => a['물품코드'].localeCompare(b['물품코드']));
-            renderCards(sortedItems);
-        }
-
-        function renderCards(items) {
-            const preview = document.getElementById('previewSection');
-            preview.innerHTML = '';
-
-            items.forEach(item => {
-                const card = createHistoryCard(item);
-                preview.appendChild(card);
+        function exportToExcel() {
+            let csv = '물품코드,물품명(한글),물품명(Khmer),카테고리,현재고,최소재고,상태,위치,단가(USD),구매일자,등록일,비고\n';
+            
+            inventory.forEach(item => {
+                const status = getStatus(item);
+                const statusText = status === 'good' ? '정상' : status === 'low' ? '부족' : '긴급';
+                const categoryName = getCategoryName(item.category);
+                const koreanName = item.nameKo || item.name.split(' | ')[0];
+                const khmerName = item.nameKh || item.name.split(' | ')[1] || '';
+                
+                csv += `"${item.code}","${koreanName}","${khmerName}","${categoryName}",${item.quantity},${item.minQuantity},"${statusText}","${item.location}",${item.price || 0},"${item.purchaseDate || ''}","${formatDate(item.createdDate)}","${item.notes || ''}"\n`;
             });
 
-            preview.scrollTop = 0;
-        }
-
-        function createHistoryCard(item) {
-            const card = document.createElement('div');
-            card.className = 'history-card';
-
-            const today = new Date().toLocaleDateString('ko-KR', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit'
-            }).replace(/\. /g, '/').replace('.', '');
-
-            const photoUrl = photoData[item['물품코드']] || item['사진'] || '';
-            const categoryName = getCategoryName(item['카테고리']);
-
-            card.innerHTML = `
-                <div class="card-title">
-                    물 품 이 력 카 드
-                    <div style="font-size: 14px; color: #666; margin-top: 5px;">${categoryName}</div>
-                </div>
-                <div style="text-align: right; font-size: 11px; color: #666; margin-bottom: 12px;">(${today})</div>
-
-                <table class="info-table">
-                    <tr>
-                        <th>물품코드</th>
-                        <td colspan="3"><strong style="font-size: 15px;">${item['물품코드']}</strong></td>
-                    </tr>
-                    <tr>
-                        <th>물품명(한글)</th>
-                        <td colspan="3">${item['물품명(한글)']}</td>
-                    </tr>
-                    <tr>
-                        <th>물품명(Khmer)</th>
-                        <td colspan="3"><span style="font-family: 'Noto Sans Khmer'">${item['물품명(Khmer)']}</span></td>
-                    </tr>
-                    <tr>
-                        <th>카테고리</th>
-                        <td colspan="3">${categoryName}</td>
-                    </tr>
-                    <tr>
-                        <th>현재고</th>
-                        <td>${item['현재고']} 개</td>
-                        <th>최소재고</th>
-                        <td>${item['최소재고']} 개</td>
-                    </tr>
-                    <tr>
-                        <th>위치</th>
-                        <td colspan="3">${item['위치'] || '-'}</td>
-                    </tr>
-                    <tr>
-                        <th>단가(USD)</th>
-                        <td colspan="3"><strong>$${Number(item['단가(USD)']).toLocaleString()}</strong></td>
-                    </tr>
-                    <tr>
-                        <th>구매일자</th>
-                        <td>${item['구매일자'] || '-'}</td>
-                        <th>등록일</th>
-                        <td>${item['등록일'] || '-'}</td>
-                    </tr>
-                    <tr>
-                        <th>비고</th>
-                        <td colspan="3">${item['비고'] || '-'}</td>
-                    </tr>
-                </table>
-
-                <div style="margin-top: 20px; border: 2px solid #000; padding: 15px; height: 280px; text-align: center; background: #f8f9fa;">
-                    <h4 style="font-size: 14px; margin-bottom: 10px;">📸 사진</h4>
-                    ${photoUrl ? 
-                        `<img src="${photoUrl}" style="max-width: 240px; max-height: 240px; border: 1px solid #ddd;" alt="물품 사진">` : 
-                        '<div style="width: 240px; height: 240px; margin: 10px auto; border: 2px dashed #999; display: flex; align-items: center; justify-content: center; color: #999; font-size: 13px;">사진 없음</div>'
-                    }
-                </div>
-            `;
-
-            return card;
-        }
-
-        function loadPhotosFromGoogle() {
-            showAlert('사진 데이터를 불러오는 중...', 'info', 'printAlert');
+            const BOM = '\uFEFF';
+            const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
             
-            google.script.run
-                .withSuccessHandler(function(result) {
-                    if (result.success && result.photos) {
-                        photoData = result.photos;
-                        showAlert(`✅ 사진 ${Object.keys(photoData).length}개 로드 완료!`, 'success', 'printAlert');
-                    } else {
-                        showAlert('⚠️ 사진 데이터를 찾을 수 없습니다', 'error', 'printAlert');
-                    }
-                })
-                .withFailureHandler(function(error) {
-                    showAlert('❌ 사진 로드 실패: ' + error.message, 'error', 'printAlert');
-                })
-                .getPhotos();
+            const today = new Date().toISOString().split('T')[0];
+            link.setAttribute('href', url);
+            link.setAttribute('download', `우정캄보디아_물품관리_${today}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            alert('Excel 파일이 다운로드되었습니다!');
         }
 
-        // 모달 외부 클릭 시 닫기
+        window.onload = init;
+
         window.onclick = function(event) {
             const modal = document.getElementById('itemModal');
-            if (event.target == modal) {
+            if (event.target === modal) {
                 closeModal();
             }
         }
