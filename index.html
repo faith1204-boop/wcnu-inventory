@@ -520,6 +520,103 @@
             margin-top: 5px;
         }
 
+        /* ⭐⭐⭐ 인쇄용 스타일 ⭐⭐⭐ */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .controls,
+            .stats-grid,
+            .btn,
+            .action-buttons,
+            .modal,
+            .loading-overlay {
+                display: none !important;
+            }
+
+            .header {
+                background: #1e3c72;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                page-break-after: avoid;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .table-container {
+                border: none;
+                overflow: visible;
+            }
+
+            table {
+                page-break-inside: auto;
+            }
+
+            thead {
+                display: table-header-group;
+                background: #f9fafb;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
+            .badge {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* 카테고리별 페이지 구분 */
+            .category-section {
+                page-break-before: always;
+                margin-top: 40px;
+            }
+
+            .category-section:first-child {
+                page-break-before: avoid;
+                margin-top: 0;
+            }
+
+            .category-header {
+                background: #f3f4f6;
+                padding: 15px;
+                margin-bottom: 20px;
+                border-left: 5px solid #667eea;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .category-header h2 {
+                font-size: 20px;
+                color: #1f2937;
+                margin-bottom: 5px;
+            }
+
+            .category-header .khmer {
+                font-size: 16px;
+                color: #6b7280;
+            }
+
+            .print-date {
+                text-align: right;
+                color: #6b7280;
+                font-size: 12px;
+                margin-top: 10px;
+            }
+        }
+
         @media (max-width: 768px) {
             .controls {
                 flex-direction: column;
@@ -595,6 +692,10 @@
                 <button class="btn btn-success" onclick="exportToExcel()">
                     <span>📊 Excel 내보내기</span>
                     <span class="khmer">នាំចេញជា Excel</span>
+                </button>
+                <button class="btn btn-success" onclick="printInventory()">
+                    <span>🖨️ 인쇄</span>
+                    <span class="khmer">បោះពុម្ព</span>
                 </button>
                 <button class="btn btn-success" onclick="loadFromGoogleSheets()">
                     <span>🔄 새로고침</span>
@@ -1025,6 +1126,124 @@
 
         function hideLoading() {
             document.getElementById('loadingOverlay').classList.remove('active');
+        }
+
+        // ⭐⭐⭐ 카테고리별 인쇄 기능 ⭐⭐⭐
+        function printInventory() {
+            // 현재 테이블 HTML 백업
+            const originalTable = document.getElementById('inventoryTable').parentElement.innerHTML;
+            
+            // 카테고리 순서 정의
+            const categoryOrder = [
+                'practice',
+                'education-it',
+                'education-furniture',
+                'education-equipment',
+                'office',
+                'cleaning',
+                'books',
+                'warehouse',
+                'other'
+            ];
+            
+            // 카테고리별로 데이터 그룹화
+            const groupedData = {};
+            categoryOrder.forEach(cat => {
+                groupedData[cat] = inventory.filter(item => item.category === cat);
+            });
+            
+            // 인쇄용 HTML 생성
+            let printHTML = '';
+            
+            categoryOrder.forEach((category, index) => {
+                const items = groupedData[category];
+                
+                if (items.length === 0) return; // 데이터가 없는 카테고리는 건너뛰기
+                
+                const categoryName = getCategoryName(category).replace(/<br>/g, ' / ').replace(/<\/?small>/g, '');
+                
+                // 카테고리 섹션 시작
+                printHTML += `
+                    <div class="category-section">
+                        <div class="category-header">
+                            <h2>${categoryName}</h2>
+                            <div class="print-date">총 ${items.length}개 물품</div>
+                        </div>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>번호</th>
+                                    <th>물품코드<div class="khmer">លេខកូដ</div></th>
+                                    <th>물품명<div class="khmer">ឈ្មោះសម្ភារៈ</div></th>
+                                    <th>현재고<div class="khmer">ស្តុកបច្ចុប្បន្ន</div></th>
+                                    <th>최소재고<div class="khmer">ស្តុកអប្បបរមា</div></th>
+                                    <th>상태<div class="khmer">ស្ថានភាព</div></th>
+                                    <th>위치<div class="khmer">ទីតាំង</div></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                // 카테고리 내 물품들
+                items.forEach((item, idx) => {
+                    const status = getStatus(item);
+                    const statusClass = status === 'good' ? 'status-good' : 
+                                      status === 'low' ? 'status-low' : 'status-critical';
+                    const statusText = status === 'good' ? '정상 / ធម្មតា' : 
+                                     status === 'low' ? '부족 / ខ្វះ' : '긴급 / បន្ទាន់';
+                    
+                    const koreanName = item.nameKo || item.name.split(' | ')[0];
+                    const khmerName = item.nameKh || item.name.split(' | ')[1] || '';
+                    
+                    printHTML += `
+                        <tr>
+                            <td>${idx + 1}</td>
+                            <td><strong>${item.code}</strong></td>
+                            <td>
+                                ${koreanName}
+                                ${khmerName ? '<br><small style="color: #9ca3af;">' + khmerName + '</small>' : ''}
+                            </td>
+                            <td><strong>${item.quantity}</strong></td>
+                            <td>${item.minQuantity}</td>
+                            <td class="${statusClass}">${statusText}</td>
+                            <td>${item.location}</td>
+                        </tr>
+                    `;
+                });
+                
+                printHTML += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            });
+            
+            // 인쇄 날짜 추가
+            const printDate = new Date().toLocaleString('ko-KR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            printHTML += `
+                <div style="margin-top: 30px; text-align: right; color: #6b7280; font-size: 12px;">
+                    인쇄일시: ${printDate}
+                </div>
+            `;
+            
+            // 테이블 교체
+            document.querySelector('.table-container').innerHTML = printHTML;
+            
+            // 인쇄 실행
+            window.print();
+            
+            // 원래 테이블로 복원
+            setTimeout(() => {
+                document.querySelector('.table-container').innerHTML = originalTable;
+            }, 100);
         }
 
         // ⭐⭐⭐ 수정: 카테고리 선택 시 코드와 물품명 리스트 업데이트 (수정 모드 구분) ⭐⭐⭐
@@ -1501,7 +1720,7 @@
             inventory.forEach(item => {
                 const status = getStatus(item);
                 const statusText = status === 'good' ? '정상' : status === 'low' ? '부족' : '긴급';
-                const categoryName = getCategoryName(item.category);
+                const categoryName = getCategoryName(item.category).replace(/<br>/g, ' / ').replace(/<\/?small>/g, '');
                 const koreanName = item.nameKo || item.name.split(' | ')[0];
                 const khmerName = item.nameKh || item.name.split(' | ')[1] || '';
                 
